@@ -1,0 +1,21 @@
+int main()
+{
+	int i;
+	for(i=0;i<5;i++)
+		printf("%d\n",i);
+	return 0;
+}
+
+int main()
+{
+	int i;
+	for(i=0;i<5;i++)
+		printf("%d\n",i);
+	return 0;
+}
+abcds$date_sunshine bcads$ate_sunshine
+abcds$date_sunshine bcads$ate_sunshine
+//abcds$date_sunshine bcads$ate_sunshine
+abcds2ate_sunshine bcads$ate_sunshine
+//abcds$date_sunshine bcads$ate_sunshine
+//cabds$date_sunshine 

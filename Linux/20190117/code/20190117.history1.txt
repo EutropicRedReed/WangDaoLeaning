@@ -1,0 +1,51 @@
+ 2009  cd ..
+ 2010  ls
+ 2011  mkdir core
+ 2012  cd core/
+ 2013  ls
+ 2014  vim main.c
+ 2015  gcc main.c 
+ 2016  ./a.out 
+ 2017  echo $?
+ 2018  cat main.c 
+ 2019  ls
+ 2020  echo $?
+ 2021  vim main.c 
+ 2022  gcc main.c 
+ 2023  ./a.out 
+ 2024  echo $?
+ 2025  vim main.c 
+ 2026  gcc main.c 
+ 2027  ./a.out 
+ 2028  echo $?
+ 2029  vim main.c 
+ 2030  gcc -g main.c 
+ 2031  ulimit -a
+ 2032  ulimit -c unlimited
+ 2033  ls
+ 2034  ./a.out 
+ 2035  ls
+ 2036  ls -l
+ 2037  gdb a.out core
+ 2038  ulimit 
+ 2039  ulimit -a'
+ 2040  ulimit -a
+ 2041  ps -elf
+ 2042  clear
+ 2043  ls
+ 2044  rm core
+ 2045  gdb a.out core
+ 2046  ls
+ 2047  cd ..
+ 2048  ls
+ 2049  mkdir makefile
+ 2050  cd makefile/
+ 2051  cp ../gdb/main.c .
+ 2052  ls
+ 2053  vim Makefile
+ 2054  make
+ 2055  cd ~
+ 2056  tar cvzf 20190117.tar.gz 20190117
+ 2057  kscp 20190117.tar.gz 
+ 2058  history 
+ 2059  history |tail -51>20190117.history1.txt
