@@ -118,6 +118,7 @@ int main(int argc,char *argv[])
                     exit(-1);
                 }else if(0==ret)
                 {
+                    printf("client disconnect\n");
                     break;
                 }
                 printf("%s--from client\n",buf);//already have \n in cfd cache.
@@ -125,7 +126,7 @@ int main(int argc,char *argv[])
             {
                 memset(buf,0,sizeof(buf));
                 fgets(buf,sizeof(buf),stdin);
-                if(-1==send(cfd,buf,sizeof(buf)-1,0))
+                if(-1==send(cfd,buf,strlen(buf)-1,0))
                 {
                     perror("send");
                     close(cfd);

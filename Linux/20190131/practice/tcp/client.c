@@ -105,13 +105,18 @@ int main(int argc,char *argv[])
         if(FD_ISSET(sfd,&readset))
         {
             memset(buf,0,sizeof(buf));
-            recv(sfd,buf,sizeof(buf),0);
+            ret=recv(sfd,buf,sizeof(buf),0);
+            if(0==ret)
+            {
+                printf("server disconnect\n");
+                break;
+            }
             printf("%s--froms server\n",buf);//already have \n in sfd cache.
         }else if(FD_ISSET(STDIN_FILENO,&readset))
         {
             memset(buf,0,sizeof(buf));
             fgets(buf,sizeof(buf),stdin);
-            send(sfd,buf,sizeof(buf)-1,0);
+            send(sfd,buf,strlen(buf)-1,0);
         }else if(-1==ret)
         {
             perror("select");
