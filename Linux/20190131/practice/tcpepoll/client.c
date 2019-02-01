@@ -81,7 +81,7 @@ void signalhandler(void)
     sigset_t sigSet;
     sigemptyset(&sigSet);
     sigaddset(&sigSet,SIGINT);
-    //sigaddset(&sigSet,SIGQUIT);
+    sigaddset(&sigSet,SIGQUIT);
     sigprocmask(SIG_BLOCK,&sigSet,NULL);
 }
 
@@ -92,70 +92,44 @@ void signalhandler(void)
 int main(int argc,char *argv[])
 {
     args_check(argc,3);
-    signalhandler();
-    int sfd=tcp_init(argv[1],atoi(argv[2]));
-    int value=1;
-    setsockopt(sfd,SOL_SOCKET,SO_REUSEADDR,\
-               (const char*)&value,sizeof(int));
-    fd_set readset;
-    int ret;
-    //struct timeval t;
+    int sfd=tcp_connect(argv[1],atoi(argv[2]));
+    char buf[512]={0};
+    int ret,ready,i;
+    int epfd=epoll_create(1);
+    struct epoll_event event,evs[2];
+    event.events=EPOLLIN;
+    event.data.fd=STDIN_FILENO;
+    ret=epoll_ctl(epfd,EPOLL_CTL_ADD,STDIN_FILENO,&event);
+    if(-1==ret){perror("epoll_ctl");exit(-1);}
+    event.data.fd=sfd;
+    ret=epoll_ctl(epfd,EPOLL_CTL_ADD,sfd,&event);
+    if(-1==ret){perror("epoll_ctl");exit(-1);}
     while(1)
     {
-        int cfd=tcp_accept(sfd);
-        value=10;
-        setsockopt(cfd,SOL_SOCKET,SO_SNDLOWAT,\
-                   (const char*)&value,sizeof(int));
-        setsockopt(cfd,SOL_SOCKET,SO_RCVLOWAT,\
-                   (const char*)&value,sizeof(int));
-        while(1)
+        memset(evs,0,sizeof(evs));
+        ready=epoll_wait(epfd,evs,2,-1);
+        for(i=0;i<ready;i++)
         {
-            char buf[512]={0};
-            FD_ZERO(&readset);
-            FD_SET(cfd,&readset);
-            FD_SET(STDIN_FILENO,&readset);
-            //t.tv_sec=0;
-            //t.tv_usec=500;
-            ret=select(cfd+1,&readset,NULL,NULL,NULL);
-            if(ret>0)
+            if(sfd==evs[i].data.fd)
             {
-                if(FD_ISSET(cfd,&readset))
+                memset(buf,0,sizeof(buf));
+                ret=recv(sfd,buf,sizeof(buf)-1,0);
+                if(0==ret)
                 {
-                    memset(buf,0,sizeof(buf));
-                    ret=recv(cfd,buf,sizeof(buf),0);
-                    if(-1==ret)
-                    {
-                        perror("recv");
-                        close(cfd);
-                        close(sfd);
-                        exit(-1);
-                    }else if(0==ret)
-                    {
-                        printf("client disconnect\n");
-                        break;
-                    }
-                    printf("%s--from client\n",buf);//already have \n in cfd cache.
-                }else if(FD_ISSET(STDIN_FILENO,&readset))
-                {
-                    memset(buf,0,sizeof(buf));
-                    fgets(buf,sizeof(buf),stdin);
-                    if(-1==send(cfd,buf,strlen(buf)-1,0))
-                    {
-                        perror("send");
-                        close(cfd);
-                        exit(-1);
-                    }
-                }else if(-1==ret)
-                {
-                    perror("select");
-                    close(sfd);
-                    exit(-1);
+                    printf("server disconnect\n");
+                    break;
                 }
+                printf("%s--froms server\n",buf);//already have \n in sfd cache.
+            }else if(STDIN_FILENO==evs[i].data.fd)
+            {
+                memset(buf,0,sizeof(buf));
+                fgets(buf,sizeof(buf)-1,stdin);
+                send(sfd,buf,strlen(buf)-1,0);
+            } else {
+                continue;
             }
         }
-        close(cfd);
+        close(sfd);
+        return 0;
     }
-    close(sfd);
-    return 0;
 }
-

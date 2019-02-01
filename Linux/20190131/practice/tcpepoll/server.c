@@ -22,7 +22,7 @@ int tcp_init(const char* ip,int port)
     memset(&serveraddr,0,sizeof(struct sockaddr_in));
     serveraddr.sin_family=AF_INET;
     serveraddr.sin_port=htons(port);
-    serveraddr.sin_addr.s_addr=inet_addr(ip);
+    serveraddr.sin_addr.s_addr=INADDR_ANY;
     if(bind(sfd,(struct sockaddr*)&serveraddr,sizeof(struct sockaddr))==-1)
     {
         perror("bind");
@@ -94,32 +94,27 @@ int main(int argc,char *argv[])
     args_check(argc,3);
     signalhandler();
     int sfd=tcp_init(argv[1],atoi(argv[2]));
-    int value=1;
-    setsockopt(sfd,SOL_SOCKET,SO_REUSEADDR,\
-               (const char*)&value,sizeof(int));
-    fd_set readset;
-    int ret;
-    //struct timeval t;
+    int ret,ready,i;
+    int epfd=epoll_create(1);
+    struct epoll_event event,evs[2];
+    event.events=EPOLLIN;
+    event.data.fd=STDIN_FILENO;
+    ret=epoll_ctl(epfd,EPOLL_CTL_ADD,STDIN_FILENO,&event);
+    if(-1==ret){perror("epoll_ctl");exit(-1);}
     while(1)
     {
         int cfd=tcp_accept(sfd);
-        value=10;
-        setsockopt(cfd,SOL_SOCKET,SO_SNDLOWAT,\
-                   (const char*)&value,sizeof(int));
-        setsockopt(cfd,SOL_SOCKET,SO_RCVLOWAT,\
-                   (const char*)&value,sizeof(int));
+        event.data.fd=cfd;
+        ret=epoll_ctl(epfd,EPOLL_CTL_ADD,cfd,&event);
+        if(-1==ret){perror("epoll_ctl");exit(-1);}
         while(1)
         {
             char buf[512]={0};
-            FD_ZERO(&readset);
-            FD_SET(cfd,&readset);
-            FD_SET(STDIN_FILENO,&readset);
-            //t.tv_sec=0;
-            //t.tv_usec=500;
-            ret=select(cfd+1,&readset,NULL,NULL,NULL);
-            if(ret>0)
+            memset(evs,0,sizeof(evs));
+            ready=epoll_wait(epfd,evs,2,-1);//two events aways wait
+            for(i=0;i<ready;i++)
             {
-                if(FD_ISSET(cfd,&readset))
+                if(cfd==evs[i].data.fd)
                 {
                     memset(buf,0,sizeof(buf));
                     ret=recv(cfd,buf,sizeof(buf),0);
@@ -135,7 +130,7 @@ int main(int argc,char *argv[])
                         break;
                     }
                     printf("%s--from client\n",buf);//already have \n in cfd cache.
-                }else if(FD_ISSET(STDIN_FILENO,&readset))
+                } else if(STDIN_FILENO==evs[i].data.fd)
                 {
                     memset(buf,0,sizeof(buf));
                     fgets(buf,sizeof(buf),stdin);
@@ -143,13 +138,11 @@ int main(int argc,char *argv[])
                     {
                         perror("send");
                         close(cfd);
+                        close(sfd);
                         exit(-1);
                     }
-                }else if(-1==ret)
-                {
-                    perror("select");
-                    close(sfd);
-                    exit(-1);
+                } else {
+                    continue;
                 }
             }
         }
