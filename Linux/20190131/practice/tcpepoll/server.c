@@ -22,7 +22,7 @@ int tcp_init(const char* ip,int port)
     memset(&serveraddr,0,sizeof(struct sockaddr_in));
     serveraddr.sin_family=AF_INET;
     serveraddr.sin_port=htons(port);
-    serveraddr.sin_addr.s_addr=INADDR_ANY;
+    serveraddr.sin_addr.s_addr=inet_addr(ip);
     if(bind(sfd,(struct sockaddr*)&serveraddr,sizeof(struct sockaddr))==-1)
     {
         perror("bind");
@@ -94,19 +94,26 @@ int main(int argc,char *argv[])
     args_check(argc,3);
     signalhandler();
     int sfd=tcp_init(argv[1],atoi(argv[2]));
+    int value=1;
+    setsockopt(sfd,SOL_SOCKET,SO_REUSEADDR,\
+               (const char*)&value,sizeof(int));
     int ret,ready,i;
+
     int epfd=epoll_create(1);
     struct epoll_event event,evs[2];
     event.events=EPOLLIN;
     event.data.fd=STDIN_FILENO;
     ret=epoll_ctl(epfd,EPOLL_CTL_ADD,STDIN_FILENO,&event);
     if(-1==ret){perror("epoll_ctl");exit(-1);}
+
     while(1)
     {
         int cfd=tcp_accept(sfd);
+
         event.data.fd=cfd;
         ret=epoll_ctl(epfd,EPOLL_CTL_ADD,cfd,&event);
         if(-1==ret){perror("epoll_ctl");exit(-1);}
+
         while(1)
         {
             char buf[512]={0};

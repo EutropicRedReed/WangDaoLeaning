@@ -117,7 +117,8 @@ int main(int argc,char *argv[])
                 if(0==ret)
                 {
                     printf("server disconnect\n");
-                    break;
+                    close(sfd);
+                    exit(0);
                 }
                 printf("%s--froms server\n",buf);//already have \n in sfd cache.
             }else if(STDIN_FILENO==evs[i].data.fd)
@@ -129,7 +130,7 @@ int main(int argc,char *argv[])
                 continue;
             }
         }
-        close(sfd);
-        return 0;
     }
+    close(sfd);
+    return 0;
 }
