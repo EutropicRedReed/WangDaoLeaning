@@ -106,6 +106,7 @@ int main(int argc,char *argv[])
         value=10;
         setsockopt(cfd,SOL_SOCKET,SO_SNDLOWAT,\
                    (const char*)&value,sizeof(int));
+        printf("%d\n",errno);   //can't reuse.
         setsockopt(cfd,SOL_SOCKET,SO_RCVLOWAT,\
                    (const char*)&value,sizeof(int));
         while(1)

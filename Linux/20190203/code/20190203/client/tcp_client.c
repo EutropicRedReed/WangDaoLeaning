@@ -1,5 +1,5 @@
 #include <func.h>
-
+int recv_n(int sfd,char* ptran,int len);
 int main(int argc,char *argv[])
 {
     args_check(argc,3);
@@ -24,8 +24,14 @@ int main(int argc,char *argv[])
     }
     int dataLen;
     char buf[1000]={0};
-    recv(socketfd,&dataLen,sizeof(int),0);
-    recv(socketfd,buf,dataLen,0);
+    recv_n(socketfd,(char*)&dataLen,sizeof(int));
+    recv_n(socketfd,(char*)&ret,sizeof(int));
+    recv_n(socketfd,buf,dataLen);
+    off_t fileTotalSize,fileLoadSize=0;
+    //接文件大小
+    recv_n(socketfd,(char*)&dataLen,sizeof(int));
+    recv_n(socketfd,(char*)&ret,sizeof(int));
+    recv_n(socketfd,(char*)&fileTotalSize,dataLen);
     int fd;
     fd=open(buf,O_WRONLY|O_CREAT,0666);
     if(-1==fd)
@@ -33,14 +39,26 @@ int main(int argc,char *argv[])
         perror("open");
         return -1;
     }
+    time_t start=time(NULL),now;
+    now=start; 
     while(1)
     {
-        recv(socketfd,&dataLen,sizeof(int),0);
+        recv_n(socketfd,(char*)&dataLen,sizeof(int));
+        recv_n(socketfd,(char*)&ret,sizeof(int));
         if(dataLen>0)
         {
-            recv(socketfd,buf,dataLen,0);
+            recv_n(socketfd,buf,dataLen);
             write(fd,buf,dataLen);
+            fileLoadSize+=dataLen;
+            now=time(NULL);
+            if(now-start>0)
+            {
+                printf("%5.2f%s\r",(double)fileLoadSize/fileTotalSize*100,"%");
+                fflush(stdout);
+                start=now;
+            }
         }else{
+            printf("100.00%s\n","%");
             close(fd);
             printf("recv success\n");
             break;

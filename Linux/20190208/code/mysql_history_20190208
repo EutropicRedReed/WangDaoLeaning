@@ -1,0 +1,65 @@
+select * from Person order by Age limit 0,1;
+exit
+show databases;
+exit
+show databases;
+use test;
+show tables;
+create table Person(personID int NOT NULL 
+AUTO_INCREMENT,PRIMARY KEY(personID),FirstName varchar
+(15),LastName varchar(15),Age int);
+create table Person(personID int NOT NULL   AUTO_INCREMENT,PRIMARY KEY(personID),FirstName varchar  (15),LastName varchar(15),Age int);
+show tables;
+show create table Person;
+insert into Person(FirstName,LastName,Age) values('xiong','da',5);
+select * from Person;
+alter table Person add birthday DATE;
+select * from Person;
+show create table Person;
+show variables like 'character%';
+select * from Person;
+insert into Person(FirstName,LastName,Age) values('xiong','er',3);
+select * from Person;
+update Person set birthday='2014-06-01' where personID=1;
+select * from Person;
+update Person set FirstName='guang',LastName='touqiang' where personID=1;
+select * from Person;
+delete from Person where FirstName='xiong';
+select * from Person;
+insert into Person(FirstName,LastName,Age) values('xiong','er',3);
+select * from Person;
+delete from Person where birthday='NULL';
+select * from Person;
+delete from Person where birthday is NULL;
+select * from Person;
+select FirstName,LastName from Person;
+insert into Person(FirstName,LastName,Age) values('xiong','er',3);
+select FirstName,LastName from Person;
+select * from Person;
+select FirstName from Person;
+select distinct FirstName from Person;
+select * from Person;
+select distinct * from Person;
+select * from Person where birthday='2014-06-01';
+insert into Person(FirstName,LastName,Age) values('le','le',10);
+select * from Person;
+select * from Person where Age between 3 and 5;
+select * from Person where Age in(3,10);
+select * from Person where FirstName like 'xi%';
+update Person set LastName='NULL' where personID=5;
+select * from Person;
+select * from Person where LastName='NULL';
+select * from Person where LastName is 'NULL';
+select * from Person where LastName is NULL;
+select * from Person where Age<=3 and Age>=10;
+select * from Person where Age<=3 or Age>=10;
+select * from Person where FirstName='xiong' and LastName='er';
+select * from Person order by FirstName;
+select * from Person order by FirstName desc;
+select * from Person order by Age desc;
+select * from Person order by Age;
+select * from Person order by Age desc;
+select * from Person order by Age desc limit 0,2;
+select * from Person order by Age desc limit 0,3;
+select * from Person order by Age desc limit 0,2;
+exit
