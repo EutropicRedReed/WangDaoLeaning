@@ -1,5 +1,0 @@
-1.git push The requested URL returned error: 401 while accessing
-    git remote set-url origin http://yourname@git.yourcompany-inc.com/yourname/your-project.git
-2.fatal: the remote end hung up unexpectedly
-    git config http.postBuffer 524288000
-git add . 后想撤销某个文件使用： git reset head 文件名 即可撤销该文件的add操作

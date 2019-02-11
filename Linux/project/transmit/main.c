@@ -7,7 +7,11 @@ void cleanup(void *p)
 void* threadfunc(void* p)
 {
     pFactory pf=(pFactory)p;
-    pQue_t pq=&pf->que;
+    pthread_mutex_lock(&pf->que->queMutex);
+    pQue_t pq=pf->que+*pf->Flag;    // ==pf->que+i
+    ++*pf->Flag;
+    pthread_mutex_unlock(&pf->que->queMutex);
+
     pthread_cleanup_push(cleanup,pq);
     pNode_t pcur;
     int ret;
@@ -22,7 +26,10 @@ void* threadfunc(void* p)
         pthread_mutex_unlock(&pq->queMutex);
         if(0==ret)
         {
-            tranFile(pcur->ndSocketfd);
+            //tranFile(pcur->ndSocketfd);
+            //uploadFile(pcur->ndSocketfd);
+            printf("start server\n");
+            recvorder(pcur->ndSocketfd);
             free(pcur);
         }
         pcur=NULL;
@@ -33,9 +40,8 @@ void sigExitFunc(int signum)
 {
     write(exitFds[1],&signum,1);
 }
-int main(int argc,char **argv)
+int main()
 {
-    args_check(argc,2);
     pipe(exitFds);
     if(fork())
     {//if内的是父进程
@@ -44,16 +50,13 @@ int main(int argc,char **argv)
         wait(NULL);
         exit(0);
     }
-    close(exitFds[1]);//子进程关闭管道写端
-
+    close(exitFds[1]);
+    //Initialization
     Factory f;
     factoryInit(&f,threadfunc);
     factoryStart(&f);
     int socketfd=tcpInit();
-
-    int new_fd;
-    pQue_t pq=&f.que;
-    pNode_t pnew;
+    // register events
     int epfd=epoll_create(1);
     struct epoll_event event,evs[2];
     event.events=EPOLLIN;
@@ -61,7 +64,12 @@ int main(int argc,char **argv)
     epoll_ctl(epfd,EPOLL_CTL_ADD,exitFds[0],&event);
     event.data.fd=socketfd;
     epoll_ctl(epfd,EPOLL_CTL_ADD,socketfd,&event);
+
+    int new_fd;
+    pQue_t pq=f.que;
+    pNode_t pnew;
     int fdReadyNum,i;
+    int j=0;
     while(1)
     {
         fdReadyNum=epoll_wait(epfd,evs,2,-1);
@@ -73,8 +81,13 @@ int main(int argc,char **argv)
                  pnew=(pNode_t)calloc(1,sizeof(Node_t));
                  pnew->ndSocketfd=new_fd;
                  pthread_mutex_lock(&pq->queMutex);
-                 queInsert(pq,pnew);
+                 queInsert(pq+j++,pnew);
                  pthread_mutex_unlock(&pq->queMutex);
+                 if(j>=CAPACITY_)
+                 {
+                     j=0;
+                     pq=f.que;
+                 }
                  pthread_cond_signal(&f.cond);
             }
             if(exitFds[0]==evs[i].data.fd)

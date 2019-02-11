@@ -6,6 +6,7 @@ typedef struct{
     int dataLen;
     char buf[MAX_BUF_SIZE];
 }train;
+#define DOWNFILE "file"
 int tranFile(int new_fd,char *pathname);
 int uploadFile(int new_fd);
 int send_n(int sfd,void* ptran,int len);

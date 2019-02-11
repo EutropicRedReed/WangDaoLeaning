@@ -7,12 +7,18 @@ typedef void* (*threadfunc_t)(void*);
 typedef struct{
     pthread_t *pthid;
     int threadNum;
-    Que_t que;
+    pQue_t que;
     pthread_cond_t cond;
     threadfunc_t downFileFunc;
-    short startFlag;
+    short *Flag;
 }Factory,*pFactory;
 void factoryInit(pFactory pf,threadfunc_t threadfunc);
 void factoryStart(pFactory);
 int tcpInit();
+int my_chdir(const char *addr,int);
+void my_pwd(int);
+int my_ls(const char *addr,int);
+void my_rm(const char *pathname,int);
+int sendorder(int);
+int recvorder(int);
 #endif
