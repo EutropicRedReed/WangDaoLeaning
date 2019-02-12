@@ -1,9 +1,4 @@
-#include "tranfile.h"
-int tcpInit();
-int my_chdir(const char *addr,int fd);
-void my_pwd(int fd);
-int my_ls(const char *addr,int fd);
-int my_rm(const char *pathname,int fd);
+#include "factory.h"
 
 int recvorder(int fd)
 {

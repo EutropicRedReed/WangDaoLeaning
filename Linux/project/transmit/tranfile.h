@@ -2,9 +2,10 @@
 #define __TRANFILE_H__
 #include "head.h"
 typedef struct{
-    int dataLen;
+    int datalen;
+    unsigned short type;
     char buf[MAX_BUF_SIZE];
-}train;
+}myProtocol;
 int tranFile(int new_fd,char *pathname);
 int uploadFile(int new_fd);
 int send_n(int sfd,void* ptran,int len);

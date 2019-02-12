@@ -29,10 +29,17 @@
 #include <errno.h>
 #include <sys/uio.h>
 #include <sys/sendfile.h>
+#include <mysql/mysql.h>
+#include <crypt.h>
+#include <shadow.h>
+#include <termios.h>
+#define MYPRO_LEN_ (sizeof(int)+sizeof(unsigned short) \
+                         +MAX_BUF_SIZE*sizeof(char))
 #define args_check(argc,num) {if(argc!=num) {printf("error args\n");return -1;}}
 #define THREAD_NUM_ 10
 #define CAPACITY_ 10
 #define MAX_BUF_SIZE 4096
 #define DEFAULT_PORT 2333
-#define PIPE_BUF_ 4096
+#define PIPE_BUF_ 32768
+#define MYSQL_BUF_SIZE_ 256
 #endif

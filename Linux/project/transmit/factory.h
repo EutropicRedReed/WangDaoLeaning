@@ -12,6 +12,12 @@ typedef struct{
     threadfunc_t downFileFunc;
     short *Flag;
 }Factory,*pFactory;
+typedef struct{
+    int id;
+    char name[26];
+    char salt[11];
+    char encode[128];
+}Acc_Inf;
 void factoryInit(pFactory pf,threadfunc_t threadfunc);
 void factoryStart(pFactory);
 int tcpInit();
@@ -21,4 +27,9 @@ int my_ls(const char *addr,int);
 int my_rm(const char *pathname,int);
 int sendorder(int);
 int recvorder(int);
+int querymysql(Acc_Inf *);
+int insertmysql(Acc_Inf *);
+int generateSalt(int length,char *salt);
+int signinconfirmserver(int fd);
+int myGetPasswd(char *);
 #endif

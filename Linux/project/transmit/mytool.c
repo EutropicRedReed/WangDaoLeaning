@@ -1,6 +1,4 @@
-#include "head.h"
-#include "tranfile.h"
-#define MAX_BUF_SIZE 4096
+#include "factory.h"
 int my_chdir(const char *addr,int fd)
 {
     if(-1==chdir(addr))
