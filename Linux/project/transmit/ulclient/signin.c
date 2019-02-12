@@ -79,21 +79,27 @@ Create_PSD_Again:
         }
     }else{  // confirm account information.
         sprintf(temp,"$%d$%s$%s",acci.id,acci.salt,acci.encode);    
+#ifdef DEBUG
+        printf("%s\n",temp);
+#endif
         i=0;
 Confirm_PSD_Again:
         myGetPasswd(passwd);
-        if(!strcmp(temp,crypt(passwd,acci.salt)))
+        if(!strcmp(acci.encode,crypt(passwd,acci.salt)))
         {
             printf("Passwd correct!\n");
+            send_n(socketfd,&i,sizeof(int));
         }else{
             printf("Pasdwd wrong!\n");
-            i++;
-            printf("left %d chances\n",3-i);
-            if(i<3)
+            if(++i<3)
             {
+                memset(passwd,0,sizeof(passwd));
+                printf("left %d chances\n",3-i);
                 goto Confirm_PSD_Again;
+            }else{
+                send_n(socketfd,&i,sizeof(int));
+                exit(-1);
             }
-            return -1;
         }
     }
     return 0;

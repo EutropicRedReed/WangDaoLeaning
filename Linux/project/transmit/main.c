@@ -40,9 +40,11 @@ void* threadfunc(void* p)
             printf("pthread%d server\tclient:%d\n",j,pcur->ndSocketfd);
             //if send j to recvorder,can (j<<10 | pcur->ndSocketfd)
             //printf("*\n");
-            signinconfirmserver(pcur->ndSocketfd);
+            if(0==signinconfirmserver(pcur->ndSocketfd))
+            {
+                recvorder(pcur->ndSocketfd);    
+            }
             //printf("**\n");
-            recvorder(pcur->ndSocketfd);    
             free(pcur);
         }
         pcur=NULL;

@@ -28,8 +28,10 @@ int main()//(int argc,char *argv[])
     }
     //tranFile(socketfd);
     //uploadFile(socketfd);
-    signinconfirmclient(socketfd);
-    sendorder(socketfd);
+    if(-1!=signinconfirmclient(socketfd))
+    {
+        sendorder(socketfd);
+    }
 
 
     //int datalen;

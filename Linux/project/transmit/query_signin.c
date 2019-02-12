@@ -27,17 +27,15 @@ int querymysql(Acc_Inf *acci)
 		res=mysql_use_result(conn);
 		if(res)
 		{
-			while((row=mysql_fetch_row(res))!=NULL)
-			{	
+            if(NULL==(row=mysql_fetch_row(res)))
+            {
+                return 1;
+            }else{	
                 acci->id=atoi(row[0]);
                 strcpy(acci->salt,row[1]);
                 strcpy(acci->encode,row[2]);
                 printf("%d,%s\n",acci->id,acci->name);
 			}
-            if(NULL==row)
-            {
-                return 1;
-            }
 		}else{
             return -1;
 		}

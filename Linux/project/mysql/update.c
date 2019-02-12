@@ -11,14 +11,14 @@ int main(int argc,char* argv[])
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;
-	char* server="localhost";
-	char* user="root";
-	char* password="123";
-	char* database="test";
-	char query[200]="update Person set LastName='"; 
+	const char* server="localhost";
+	const char* user="root";
+	const char* password="123";
+	const char* database="ftp_server";
+	char query[200]="update account_information set LastName='"; 
 	sprintf(query,"%s%s%s",query,argv[1],"' where personID=5");
 	puts(query);
-	int t,r;
+	int t;
 	conn=mysql_init(NULL);
 	if(!mysql_real_connect(conn,server,user,password,database,0,NULL,0))
 	{

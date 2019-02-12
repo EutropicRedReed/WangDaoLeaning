@@ -13,6 +13,10 @@ int signinconfirmserver(int socketfd)
     {
         strcpy(acci.name,mp.buf);
         ret=querymysql(&acci);
+
+        printf("%d\n",ret);
+
+        printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
         if(-1==ret) // databases have wrong.
         {
 #ifdef DEBUG 
@@ -39,18 +43,22 @@ int signinconfirmserver(int socketfd)
                 ret=-1;
                 send_n(socketfd,&ret,sizeof(int));
                 printf("failed\n");
+                return -1;
             }
             ret=0;
             send_n(socketfd,&ret,sizeof(int));
             printf("success\n");
-            return -1;
-        }else if(0==ret)
+        }else if(0==ret)    
         {
 #ifdef DEBUG 
             printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
 #endif              
-            ret=send_n(socketfd,&acci,sizeof(acci));
-            printf("%d\n",ret);
+            send_n(socketfd,&acci,sizeof(acci));
+            recv_n(socketfd,&i,sizeof(int));
+            if(i>=3)
+            {
+                return -1;
+            }
         }
     }
     return 0;
