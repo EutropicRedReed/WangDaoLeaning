@@ -15,7 +15,7 @@ int sendorder(int socketfd)
         i=0;
         while(buf[i]!=EOF)
         {
-            if(buf[i]!=' ')
+            if(buf[i]!=' '&&buf[i]!=0)
             {
                 i++;
             }else{  // find first word.
@@ -32,22 +32,47 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
-                }
-                if(!strcmp(temp,"ls"))
+
+                    if(-1==recv_n(socketfd,&datalen,sizeof(int)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==recv_n(socketfd,buf,datalen))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    printf("%s",buf);
+                    fflush(stdout);
+                    break;
+                    
+                }else if(!strcmp(temp,"ls"))
                 {
                     type=2;
                     while(buf[++i]==' ');
                     strncpy(temp,buf+i,MAX_BUF_SIZE-i);
-                    datalen=strlen(temp);
-                    if(-1==send_n(socketfd,&datalen,sizeof(int)))
+                    if(0==(datalen=strlen(temp)))
+                    {
+                        strcpy(temp,".");
+                        datalen=strlen(temp);
+                        if(-1==send_n(socketfd,&datalen,sizeof(int)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,&type,sizeof(short)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,temp,datalen))
+                        {close(socketfd);printf("server close\n");return -1;}
+                    }else{
+                        if(-1==send_n(socketfd,&datalen,sizeof(int)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,&type,sizeof(short)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,temp,datalen))
+                        {close(socketfd);printf("server close\n");return -1;}
+                    }
+
+                    if(-1==recv_n(socketfd,&datalen,sizeof(int)))
                     {close(socketfd);printf("server close\n");return -1;}
-                    if(-1==send_n(socketfd,&type,sizeof(short)))
+                    if(-1==recv_n(socketfd,buf,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
-                    if(-1==send_n(socketfd,temp,datalen))
-                    {close(socketfd);printf("server close\n");return -1;}
-                    
-                }
-                if(!strcmp(temp,"remove"))
+                    printf("%s",buf);
+                    fflush(stdout);
+                    break;
+                }else if(!strcmp(temp,"remove"))
                 {
                     type=3;
                     while(buf[++i]==' ');
@@ -59,10 +84,18 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
-                }
-                if(!strcmp(temp,"pwd"))
+
+                    if(-1==recv_n(socketfd,&datalen,sizeof(int)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==recv_n(socketfd,buf,datalen))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    printf("%s",buf);
+                    fflush(stdout);
+                    break;
+                }else if(!strcmp(temp,"pwd"))
                 {
                     type=4;
+                    strcpy(temp,".");
                     datalen=strlen(temp);
                     if(-1==send_n(socketfd,&datalen,sizeof(int)))
                     {close(socketfd);printf("server close\n");return -1;}
@@ -70,8 +103,15 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
-                }
-                if(!strcmp(temp,"gets"))
+
+                    if(-1==recv_n(socketfd,&datalen,sizeof(int)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==recv_n(socketfd,buf,datalen))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    printf("%s",buf);
+                    fflush(stdout);
+                    break;
+                }else if(!strcmp(temp,"gets"))
                 {
                     type=5;
                     while(buf[++i]==' ');
@@ -83,8 +123,9 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
-                }
-                if(!strcmp(temp,"puts"))
+                    uploadFile(socketfd);
+                    break;
+                }else if(!strcmp(temp,"puts"))
                 {
                     type=6;
                     while(buf[++i]==' ');
@@ -97,11 +138,23 @@ int sendorder(int socketfd)
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
                     tranFile(socketfd,temp);    // begin upload file.
-                }
-                if(!strcmp(temp,"exit"))
+                    break;
+                }else if(!strcmp(temp,"exit"))
                 {
+                    type=7;
+                    datalen=strlen(temp);
+                    if(-1==send_n(socketfd,&datalen,sizeof(int)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==send_n(socketfd,&type,sizeof(short)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==send_n(socketfd,temp,datalen))
+                    {close(socketfd);printf("server close\n");return -1;}
                     close(socketfd);
+                    printf("disconnect\n");
                     return 0;
+                }else{  
+                    printf("invalid order\n");
+                    break;
                 }
             }
         }

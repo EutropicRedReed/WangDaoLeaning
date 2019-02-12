@@ -15,7 +15,7 @@ int sendorder(int socketfd)
         i=0;
         while(buf[i]!=EOF)
         {
-            if(buf[i]!=' ')
+            if(buf[i]!=' '&&buf[i]!=0)
             {
                 i++;
             }else{  // find first word.
@@ -35,35 +35,48 @@ int sendorder(int socketfd)
 
                     if(-1==recv_n(socketfd,&datalen,sizeof(int)))
                     {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==datalen)
+                    {printf("error: cd\n");break;}
                     if(-1==recv_n(socketfd,buf,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
                     printf("%s",buf);
                     fflush(stdout);
                     break;
                     
-                }
-                if(!strcmp(temp,"ls"))
+                }else if(!strcmp(temp,"ls"))
                 {
                     type=2;
                     while(buf[++i]==' ');
                     strncpy(temp,buf+i,MAX_BUF_SIZE-i);
-                    datalen=strlen(temp);
-                    if(-1==send_n(socketfd,&datalen,sizeof(int)))
-                    {close(socketfd);printf("server close\n");return -1;}
-                    if(-1==send_n(socketfd,&type,sizeof(short)))
-                    {close(socketfd);printf("server close\n");return -1;}
-                    if(-1==send_n(socketfd,temp,datalen))
-                    {close(socketfd);printf("server close\n");return -1;}
+                    if(0==(datalen=strlen(temp)))
+                    {
+                        strcpy(temp,".");
+                        datalen=strlen(temp);
+                        if(-1==send_n(socketfd,&datalen,sizeof(int)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,&type,sizeof(short)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,temp,datalen))
+                        {close(socketfd);printf("server close\n");return -1;}
+                    }else{
+                        if(-1==send_n(socketfd,&datalen,sizeof(int)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,&type,sizeof(short)))
+                        {close(socketfd);printf("server close\n");return -1;}
+                        if(-1==send_n(socketfd,temp,datalen))
+                        {close(socketfd);printf("server close\n");return -1;}
+                    }
 
                     if(-1==recv_n(socketfd,&datalen,sizeof(int)))
                     {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==datalen)
+                    {printf("error: ls\n");break;}
                     if(-1==recv_n(socketfd,buf,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
                     printf("%s",buf);
                     fflush(stdout);
                     break;
-                }
-                if(!strcmp(temp,"remove"))
+                }else if(!strcmp(temp,"remove"))
                 {
                     type=3;
                     while(buf[++i]==' ');
@@ -78,15 +91,17 @@ int sendorder(int socketfd)
 
                     if(-1==recv_n(socketfd,&datalen,sizeof(int)))
                     {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==datalen)
+                    {printf("error: remove\n");break;}
                     if(-1==recv_n(socketfd,buf,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
                     printf("%s",buf);
                     fflush(stdout);
                     break;
-                }
-                if(!strcmp(temp,"pwd"))
+                }else if(!strcmp(temp,"pwd"))
                 {
                     type=4;
+                    strcpy(temp,".");
                     datalen=strlen(temp);
                     if(-1==send_n(socketfd,&datalen,sizeof(int)))
                     {close(socketfd);printf("server close\n");return -1;}
@@ -102,8 +117,7 @@ int sendorder(int socketfd)
                     printf("%s",buf);
                     fflush(stdout);
                     break;
-                }
-                if(!strcmp(temp,"gets"))
+                }else if(!strcmp(temp,"gets"))
                 {
                     type=5;
                     while(buf[++i]==' ');
@@ -115,9 +129,9 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
+                    uploadFile(socketfd);
                     break;
-                }
-                if(!strcmp(temp,"puts"))
+                }else if(!strcmp(temp,"puts"))
                 {
                     type=6;
                     while(buf[++i]==' ');
@@ -131,11 +145,22 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     tranFile(socketfd,temp);    // begin upload file.
                     break;
-                }
-                if(!strcmp(temp,"exit"))
+                }else if(!strcmp(temp,"exit"))
                 {
+                    type=7;
+                    datalen=strlen(temp);
+                    if(-1==send_n(socketfd,&datalen,sizeof(int)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==send_n(socketfd,&type,sizeof(short)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    if(-1==send_n(socketfd,temp,datalen))
+                    {close(socketfd);printf("server close\n");return -1;}
                     close(socketfd);
+                    printf("disconnect\n");
                     return 0;
+                }else{  
+                    printf("invalid order\n");
+                    break;
                 }
             }
         }

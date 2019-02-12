@@ -1,5 +1,6 @@
 #ifndef __HEAD_H__
 #define __HEAD_H__
+#define _GNU_SOURCE
 #include <sys/stat.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -27,8 +28,11 @@
 #include <sys/epoll.h>
 #include <errno.h>
 #include <sys/uio.h>
+#include <sys/sendfile.h>
 #define args_check(argc,num) {if(argc!=num) {printf("error args\n");return -1;}}
 #define THREAD_NUM_ 10
 #define CAPACITY_ 10
+#define MAX_BUF_SIZE 4096
 #define DEFAULT_PORT 2333
+#define PIPE_BUF_ 4096
 #endif

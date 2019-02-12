@@ -10,7 +10,7 @@ int my_chdir(const char *addr,int fd)
     }
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
-	sprintf(buf,"currnt working directory: %s\n",getcwd(NULL,0));
+	sprintf(buf,"currnt directory: %s\n",getcwd(NULL,0));
     datalen=strlen(buf);
     send_n(fd,&datalen,sizeof(int));
     send_n(fd,buf,datalen);
@@ -32,6 +32,7 @@ int my_ls(const char *addr,int fd)
     DIR *p;
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
+    char temp[MAX_BUF_SIZE]={0};
     p=opendir(addr);
     chdir(addr);
     if(NULL==p)
@@ -81,32 +82,37 @@ int my_ls(const char *addr,int fd)
         //printf hide catalog
         if(!strncmp(pdir->d_name,".",1))
             continue;
-        sprintf(buf,"%s %-2ld %-7s %-7s %5ld %s %-s\n",typebuf, \
+        memset(temp,0,sizeof(temp));
+        sprintf(temp,"%s %-2ld %-7s %-7s %5ld %s %-s\n",typebuf, \
                 statbuf.st_nlink, \
                 getpwuid(statbuf.st_uid)->pw_name, \
                 getgrgid(statbuf.st_gid)->gr_name, \
                 statbuf.st_size,timebuf,pdir->d_name);
+        strcat(buf,temp);
     }
     datalen=strlen(buf);
     send_n(fd,&datalen,sizeof(int));
     send_n(fd,buf,datalen);
+    chdir("-");
     closedir(p);
     return 0;
 }
 
 
-void my_rm(const char *pathname,int fd)
+int my_rm(const char *pathname,int fd)
 {
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
     if(-1==unlink(pathname))
     {
         perror("delete failed");
+        return -1;
     }
     sprintf(buf,"delete file success\n");
     datalen=strlen(buf);
     send_n(fd,&datalen,sizeof(int));
     send_n(fd,buf,datalen);
+    return 0;
 }
 
 

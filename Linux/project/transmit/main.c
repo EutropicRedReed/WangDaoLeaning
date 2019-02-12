@@ -1,3 +1,13 @@
+/*****************************************************************************
+Copyright: 1988-1999, H  Tech. Co., Ltd.
+File name: ftp_tcp_server
+Description: 用于详细说明此程序文件完成的主要功能，与其他模块或函数的接口，输出值、取值范围、含义及参数间的控制、顺序、独立或依赖等关系
+Author: zhangyi
+Version: 3
+Date: 2019-02-11
+History: 修改历史记录列表，每条修改记录应包括修改日期、修改者及修改内容简述。
+*****************************************************************************/
+
 #include "factory.h"
 int exitFds[2];
 void cleanup(void *p)
@@ -7,9 +17,10 @@ void cleanup(void *p)
 void* threadfunc(void* p)
 {
     pFactory pf=(pFactory)p;
+    int j=0;
     pthread_mutex_lock(&pf->que->queMutex);
     pQue_t pq=pf->que+*pf->Flag;    // ==pf->que+i
-    ++*pf->Flag;
+    j=(*pf->Flag)++;
     pthread_mutex_unlock(&pf->que->queMutex);
 
     pthread_cleanup_push(cleanup,pq);
@@ -18,7 +29,7 @@ void* threadfunc(void* p)
     while(1)
     {
         pthread_mutex_lock(&pq->queMutex);
-        if(!pq->queSize)//如果队列为空，子线程就睡眠
+        if(!pq->queSize)
         {
             pthread_cond_wait(&pf->cond,&pq->queMutex);
         }
@@ -26,13 +37,14 @@ void* threadfunc(void* p)
         pthread_mutex_unlock(&pq->queMutex);
         if(0==ret)
         {
-            //tranFile(pcur->ndSocketfd);
-            //uploadFile(pcur->ndSocketfd);
-            printf("start server\n");
-            recvorder(pcur->ndSocketfd);
+            printf("pthread%d server\tclient:%d\n",j,pcur->ndSocketfd);
+            recvorder(pcur->ndSocketfd);    //if send j to recvorder,can (j<<10 | pcur->ndSocketfd)
             free(pcur);
         }
         pcur=NULL;
+        // recycling
+        //free(pf->Flag);
+        //pf->Flag=NULL;
     }
     pthread_cleanup_pop(1);
 }
@@ -44,15 +56,16 @@ int main()
 {
     pipe(exitFds);
     if(fork())
-    {//if内的是父进程
+    {//父进程
         close(exitFds[0]);
         signal(SIGUSR1,sigExitFunc);
         wait(NULL);
+        //recycling f(factory)-->pthid -->que.
         exit(0);
     }
     close(exitFds[1]);
-    //Initialization
     Factory f;
+    //Initialization
     factoryInit(&f,threadfunc);
     factoryStart(&f);
     int socketfd=tcpInit();

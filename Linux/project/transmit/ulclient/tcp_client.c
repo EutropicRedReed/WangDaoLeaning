@@ -2,23 +2,25 @@
 #include "tranfile.h"
 int sendorder(int);
 int send_n(int sfd,void* ptran,int len);
-int main(int argc,char *argv[])
+int main()//(int argc,char *argv[])
 {
-    args_check(argc,3);
+    //args_check(argc,2);
     int socketfd=socket(AF_INET,SOCK_STREAM,0);
     if(-1==socketfd)
     {
         perror("socket");
         return -1;
     }
-    printf("socketfd=%d\n",socketfd);
     struct sockaddr_in ser;
     memset(&ser,0,sizeof(ser));
     ser.sin_family=AF_INET;
-    ser.sin_port=htons(atoi(argv[2]));
-    ser.sin_addr.s_addr=inet_addr(argv[1]);
+    //ser.sin_port=htons(atoi(argv[1]));
+    ser.sin_port=htons(atoi("2333"));
+    //ser.sin_addr.s_addr=inet_addr(argv[1]);
+    ser.sin_addr.s_addr=inet_addr("192.168.3.233");
     int ret;
     ret=connect(socketfd,(struct sockaddr*)&ser,sizeof(struct sockaddr));
+    printf("success connect\n");
     if(-1==ret)
     {
         perror("connect");

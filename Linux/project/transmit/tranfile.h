@@ -1,7 +1,6 @@
 #ifndef __TRANFILE_H__
 #define __TRANFILE_H__
 #include "head.h"
-#define MAX_BUF_SIZE 4096
 typedef struct{
     int dataLen;
     char buf[MAX_BUF_SIZE];

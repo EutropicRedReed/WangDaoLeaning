@@ -6,9 +6,11 @@ int uploadFile(int new_fd)
     char buf[MAX_BUF_SIZE]={0};
     //receive file name.
     recv_n(new_fd,&datalen,sizeof(int));
+    if(-1==datalen)
+    {printf("error: gets\n");return -1;}
     recv_n(new_fd,buf,datalen);
     //receive file size.
-    off_t fileTotalSize,fileLoadSize=0,fileSlice=0;
+    off_t fileTotalSize;//,fileLoadSize=0,fileSlice=0;
     recv_n(new_fd,&datalen,sizeof(int));
     recv_n(new_fd,&fileTotalSize,datalen);
     int fd;
@@ -18,37 +20,30 @@ int uploadFile(int new_fd)
         perror("open");
         return -1;
     }
+    int pipefd[2];
+    if(-1==pipe(pipefd))
+    {perror("pipe");return -1;}
     while(1)
     {
-        ret=recv_n(new_fd,&datalen,sizeof(int));
+        ret=splice(new_fd,NULL,pipefd[1],NULL,\
+                   PIPE_BUF_, SPLICE_F_MORE | SPLICE_F_MOVE );
         if(-1==ret)
         {
-            printf("server crash\n");
+            perror("splice");
             return -1;
-        }
-        if(datalen>0)
+        }else if(0==ret)
         {
-            ret=recv_n(new_fd,buf,datalen);
-            if(-1==ret)
-            {
-                printf("server crash\n");
-                return -1;
-            }
-            write(fd,buf,datalen);
-            fileLoadSize+=datalen;
-            fileSlice+=datalen;
-            if(fileLoadSize>=fileTotalSize/10000)
-            {
-                printf("%5.2f%%\r",(double)fileLoadSize/fileTotalSize*100);
-                fflush(stdout);
-                fileSlice=0;
-            }
-        }else{
-            printf("100.00%%\n");
-            printf("receive success\n");
             break;
         }
+        if(-1==splice(pipefd[0],NULL,fd,NULL,\
+                      PIPE_BUF_, SPLICE_F_MORE | SPLICE_F_MOVE ))
+        {
+            perror("splice");
+            return -1;
+        }
     }
+    close(fd);
+    printf("receive success\n");
     return 0;
 }
 
