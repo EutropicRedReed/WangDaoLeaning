@@ -1,11 +1,35 @@
 #include "factory.h"
 int my_chdir(const char *addr,int fd)
 {
-    if(-1==chdir(addr))
+    Vir_File_Sys vfs[VIR_FILE_SYS_MAX_NUM_];
+    Tmp_Fd_Acci tfa;
+    Acc_Inf ai;
+    tfa.fd=fd;
+    querymysqltablethree(&tfa);
+    strcpy(ai.name,tfa.name);
+    querymysql(&ai);
+    vfs[0].belong=ai.PasswdId;
+    vfs[0].cur_cat='5';
+    vfs[0].type='d';
+    querymysqltabletwo(vfs);
+
+    int i,j=0,k=0;
+    char *catbuf[VIR_FILE_SYS_MAX_DEEP_];
+    memset(catbuf,0,VIR_FILE_SYS_MAX_DEEP_*sizeof(int *));
+    for(i=0;i<VIR_FILE_SYS_MAX_DEEP_;i++)
     {
-        perror("chdir");
-        return -1;
+        if(vfs[i].belong==ai.PasswdId)
+        {
+            if('1'==vfs[i].cur_cat)
+            {
+                j=i;    // j is current level of catalog
+                catbuf[k++]=vfs[i].name;    // k is position
+                updatemysqltabletwo(&vfs);
+                break;
+            }
+        }
     }
+
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
 	sprintf(buf,"currnt directory: %s\n",getcwd(NULL,0));
@@ -19,7 +43,53 @@ void my_pwd(int fd)
 {
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
-    sprintf(buf,"currnt directory: %s\n",getcwd(NULL,0));
+
+    Vir_File_Sys vfs[VIR_FILE_SYS_MAX_DEEP_];
+    Tmp_Fd_Acci tfa;
+    Acc_Inf ai;
+    tfa.fd=fd;
+    querymysqltablethree(&tfa);
+    strcpy(ai.name,tfa.name);
+    querymysql(&ai);
+    vfs[0].belong=ai.PasswdId;
+    vfs[0].cur_cat='5';
+    vfs[0].type='d';
+    querymysqltabletwo(vfs);
+    int i,j=0,k=0;
+    char *catbuf[VIR_FILE_SYS_MAX_DEEP_];
+    memset(catbuf,0,VIR_FILE_SYS_MAX_DEEP_*sizeof(int *));
+    for(i=0;i<VIR_FILE_SYS_MAX_DEEP_;i++)
+    {
+        if(vfs[i].belong==ai.PasswdId)
+        {
+            if('1'==vfs[i].cur_cat)
+            {
+                j=i;    // j is current level of catalog
+                catbuf[k++]=vfs[i].name;    // k is position
+                break;
+            }
+        }
+    }
+    --j;    
+    while(j)
+    {
+        for(i=0;i<VIR_FILE_SYS_MAX_DEEP_;i++)
+        {
+            if(vfs[i].type=='d'&&vfs[i].procode==j)
+            {
+                catbuf[k++]=vfs[i].name;
+                j--;
+            }
+        }
+    }
+    --k;
+    //strcpy(buf,"/");    // root catalog
+    for(i=k;i>=0;i--) // reverse
+    {
+        sprintf(buf,"%s/%s",buf,catbuf[i]);
+    }
+    sprintf(buf,"%s\n",buf);
+
     datalen=strlen(buf);
     send_n(fd,&datalen,sizeof(int));
     send_n(fd,buf,datalen);

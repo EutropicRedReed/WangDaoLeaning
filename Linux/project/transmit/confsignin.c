@@ -3,6 +3,7 @@ int signinconfirmserver(int socketfd)
 {
     myProtocol mp;
     Acc_Inf acci;
+    Tmp_Fd_Acci tfa;
     int i=0,ret;
     memset(&mp,0,sizeof(mp));
     memset(&acci,0,sizeof(acci));
@@ -12,6 +13,12 @@ int signinconfirmserver(int socketfd)
     if(1==i)
     {
         strcpy(acci.name,mp.buf);
+
+        // renew table three
+        strcpy(tfa.name,mp.buf);
+        tfa.fd=socketfd;
+        insertmysqltablethree(&tfa);
+
         ret=querymysql(&acci);
 #ifdef DEBUG
         printf("%d\n",ret);
@@ -22,6 +29,7 @@ int signinconfirmserver(int socketfd)
 #ifdef DEBUG 
             printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
 #endif              
+            deletemysqltablethree(&tfa);
             acci.id=-1;
             send_n(socketfd,&acci,sizeof(acci));
             return -1;
@@ -43,6 +51,7 @@ int signinconfirmserver(int socketfd)
                 ret=-1;
                 send_n(socketfd,&ret,sizeof(int));
                 printf("Account create failed\n");
+                deletemysqltablethree(&tfa);
                 return -1;
             }
             ret=0;
@@ -57,11 +66,6 @@ int signinconfirmserver(int socketfd)
             vfs.cur_cat='1';
             vfs.belong=acci.PasswdId;
         
-            // renew table three
-            Tmp_Fd_Acci tfa;
-            strcpy(tfa.name,acci.name);
-            updatemysqltablethree(&tfa);
-
             //strcpy(vfs.md5sum,md5buf);
             if(-1==virFileInsertSer(&vfs))
             {
@@ -77,13 +81,10 @@ int signinconfirmserver(int socketfd)
             recv_n(socketfd,&i,sizeof(int));
             if(i>=ACC_INF_PSD_RETRY_)
             {
+                deletemysqltablethree(&tfa);
                 return -1;
             }
         }
     }
-    // renew table three
-    Tmp_Fd_Acci tfa;
-    strcpy(tfa.name,acci.name);
-    updatemysqltablethree(&tfa);
     return 0;
 }

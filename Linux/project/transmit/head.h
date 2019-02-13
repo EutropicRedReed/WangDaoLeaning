@@ -60,5 +60,6 @@
 #define ACC_INF_ENCRYPT_ 6  // encrypt type : SHA-512.
 #define ACC_INF_PSD_RETRY_ 3 // passwd retry input number.
 #define FILE_SYS_MD5_SIZE_ 33   // md5 22 characters 
-#define VIR_FILE_SYS_MAX_DEEP_ 15
+#define VIR_FILE_SYS_MAX_DEEP_ 15   // maximal catalog depth
+#define VIR_FILE_SYS_MAX_NUM_ 256   // maximal catalog number
 #endif
