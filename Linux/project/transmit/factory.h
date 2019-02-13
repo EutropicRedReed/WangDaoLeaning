@@ -1,31 +1,4 @@
-#ifndef __FACTORY_H__
-#define __FACTORY_H__
-#include "head.h"
-#include "work_que.h"
-#include "tranfile.h"
-typedef void* (*threadfunc_t)(void*);
-typedef struct{
-    pthread_t *pthid;
-    int threadNum;
-    pQue_t que;
-    pthread_cond_t cond;
-    threadfunc_t downFileFunc;
-    short *Flag;
-}Factory,*pFactory;
-typedef struct{ // account information signin/signup structure.
-    int PasswdId;
-    int id;
-    char name[ACC_INF_NAME_];
-    char salt[ACC_INF_SALT_];
-    char encode[ACC_INF_ENCODE_];
-}Acc_Inf;
-typedef struct{ // virtual file system structure.
-    int procode;
-    char name[ACC_INF_NAME_];
-    char type;
-    short belong;
-    char md5sum[FILE_SYS_MD5_SIZE_];
-    char cur_cat;
+char cur_cat;   // '0' normal '1' current catalog '2' screen belong+md5sum '3' screen belong+name '4' screen belong+cur_cat '5' screen belong+type
 }Vir_File_Sys;  
 typedef struct{ // table three make it easy to transmit data between table 1 and table 2.
     int fd;

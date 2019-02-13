@@ -33,9 +33,20 @@
 #include <crypt.h>
 #include <shadow.h>
 #include <termios.h>
+#include <openssl/md5.h>
 #define MYPRO_LEN_ (sizeof(int)+sizeof(unsigned short) \
                          +MAX_BUF_SIZE*sizeof(char))
 #define args_check(argc,num) {if(argc!=num) {printf("error args\n");return -1;}}
+#define MYSQL_SERVER_NAME_ "localhost"
+#define MYSQL_USER_NAME_ "root"
+#define MYSQL_PASSWORD_ "123"
+#define MYSQL_DATABASES_NAME_ "ftp_server" 
+#define MYSQL_TABLE_ONE_ "account_information"
+#define MYSQL_TABLE_TWO_ "vir_file_sys"
+#define MYSQL_TABLE_THREE_ "tmp_fd_acci"
+// table of account information : account_information
+// table of virtual file system : vir_file_sys
+// table of temp fd to account information : tmp_fd_acci
 #define THREAD_NUM_ 10
 #define CAPACITY_ 10
 #define MAX_BUF_SIZE 4096
@@ -48,4 +59,6 @@
 #define ACC_INF_PASSWD_ 32  // signin or signup passwd max 32
 #define ACC_INF_ENCRYPT_ 6  // encrypt type : SHA-512.
 #define ACC_INF_PSD_RETRY_ 3 // passwd retry input number.
+#define FILE_SYS_MD5_SIZE_ 33   // md5 22 characters 
+#define VIR_FILE_SYS_MAX_DEEP_ 15
 #endif

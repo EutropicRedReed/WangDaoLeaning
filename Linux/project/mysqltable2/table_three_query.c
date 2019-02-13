@@ -1,9 +1,5 @@
-#include "../transmit/head.h"
-typedef struct{
-    int fd;
-    char name[ACC_INF_NAME_];
-}Tmp_Fd_Acci;
-int querymysqltablethree(Tmp_Fd_Acci *tfa)
+#include "../transmit/factory.h"
+int querymysqltabletwo(Vir_File_Sys *vfs,int fd)
 {
 	MYSQL *conn;
 	MYSQL_RES *res;
@@ -13,6 +9,10 @@ int querymysqltablethree(Tmp_Fd_Acci *tfa)
 	const char* password=MYSQL_PASSWORD_;
 	const char* database=MYSQL_DATABASES_NAME_;
 	int t;
+    Tmp_Fd_Acci tfa;
+    tfa.fd=fd;
+    querymysqltablethree(&tfa);
+
 	conn=mysql_init(NULL);
 	if(!mysql_real_connect(conn,server,user,password,database,0,NULL,0))
 	{
@@ -21,15 +21,34 @@ int querymysqltablethree(Tmp_Fd_Acci *tfa)
         return -1;
 	}
 
-    if(tfa->fd>0)
+    if('2'==vfs->cur_cat)
     {
-	    char query[MYSQL_BUF_SIZE_]="select fd,acci_name from temp_fd_acci where fd=";
-        sprintf(query,"%s%d;",query,tfa->fd);
+	    char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where md5sum='%s';",query,vfs->belong,vfs->md5sum);
         puts(query);
 	    t=mysql_query(conn,query);
-    }else{
-	    char query[MYSQL_BUF_SIZE_]="select fd,acci_name from temp_fd_acci where acci_name=";
-        sprintf(query,"%s'%s';",query,tfa->name);
+    }else if('3'==vfs->cur_cat){
+	    char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where name='%s';",query,vfs->belong,vfs->name);
+        puts(query);
+	    t=mysql_query(conn,query);
+    }else if('4'==vfs->cur_cat){
+	    char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where name='%c';",query,vfs->belong,vfs->cur_cat);
+        puts(query);
+	    t=mysql_query(conn,query);
+    }else if('5'==vfs->cur_cat){
+	    char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where name='%c';",query,vfs->belong,vfs->type);
+        puts(query);
+	    t=mysql_query(conn,query);
+    }else{  // normal query.
+	    char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=%d;",query,MYSQL_TABLE_TWO_,vfs->belong);
         puts(query);
 	    t=mysql_query(conn,query);
     }
@@ -46,11 +65,15 @@ int querymysqltablethree(Tmp_Fd_Acci *tfa)
             {
                 mysql_close(conn);
                 return 1;
-            }else{	
-                tfa->fd=atoi(row[0]);
-                strcpy(tfa->name,row[1]);
-                printf("query success\n");
             }
+            int j=0;
+            do{	
+                while(j<VIR_FILE_SYS_MAX_DEEP_)
+                {
+                    vfs[j]->
+                    j++;
+                }
+            }while(NULL!=(row=nysql_setch_row(res)));
         }else{
             mysql_close(conn);
             return -1;
@@ -62,14 +85,12 @@ int querymysqltablethree(Tmp_Fd_Acci *tfa)
 }
 int main()
 {
-    Tmp_Fd_Acci t;
-    t.fd=1;
-    querymysqltablethree(&t);
+    querymysqltabletwo(&t,6);
     printf("%s\n",t.name);
 
     memset(&t,0,sizeof(t));
     strcpy(t.name,"test");
-    querymysqltablethree(&t);
+    querymysqltabletwo(&t);
     printf("%d\n",t.fd);
     return 0;
 }
