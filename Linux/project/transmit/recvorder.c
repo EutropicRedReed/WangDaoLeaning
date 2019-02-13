@@ -62,6 +62,9 @@ int recvorder(int fd)
             break;
         case 7:
             printf("%d:disconnect\n",fd);
+            Tmp_Fd_Acci tfa;
+            tfa.fd=fd;
+            deletemysqltablethree(&tfa);
             close(fd);
             break;
         default :

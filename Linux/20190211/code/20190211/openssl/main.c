@@ -2,12 +2,12 @@
 #include<string.h>
 #include<stdlib.h>
 #include<openssl/md5.h>
-int main(int argc, char* argv[]) 
+int main() 
 { 
-	char *buf = "helloworld"; 
-	char *md;  
+	const char *buf = "helloworld"; 
+	unsigned char *md;  
 	int i;
-	md = MD5(buf,strlen(buf),NULL); 
+	md = MD5(buf,(unsigned long)strlen(buf),NULL); 
 	printf("%s\n",md);
 	for (i = 0; i < strlen(md); i++)
 		printf("%x", md[i]);

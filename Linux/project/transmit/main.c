@@ -23,6 +23,7 @@ void* threadfunc(void* p)
     j=(*pf->Flag)++;
     pthread_mutex_unlock(&pf->que->queMutex);
 
+
     pthread_cleanup_push(cleanup,pq);
     pNode_t pcur;
     int ret;
@@ -40,10 +41,15 @@ void* threadfunc(void* p)
             printf("pthread%d server\tclient:%d\n",j,pcur->ndSocketfd);
             //if send j to recvorder,can (j<<10 | pcur->ndSocketfd)
             //printf("*\n");
+            Tmp_Fd_Acci tfa;
+            tfa.fd=pcur->ndSocketfd;
+            insertmysqltablethree(&tfa);    
+
             if(0==signinconfirmserver(pcur->ndSocketfd))
             {
                 recvorder(pcur->ndSocketfd);    
             }
+            
             //printf("**\n");
             free(pcur);
         }

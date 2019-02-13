@@ -24,6 +24,9 @@ int main(int argc,char* argv[])
 	struct spwd *sp;
 	char *passwd;
 	char salt[512]={0};
+    struct crypt_data *cd=(struct crypt_data*)calloc(1,sizeof(cd));
+    free(cd);
+    cd=NULL;
 	if(argc!=2)
 	{
 		printf("error args\n");

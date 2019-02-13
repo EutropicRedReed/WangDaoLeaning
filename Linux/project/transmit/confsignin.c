@@ -13,10 +13,10 @@ int signinconfirmserver(int socketfd)
     {
         strcpy(acci.name,mp.buf);
         ret=querymysql(&acci);
-
+#ifdef DEBUG
         printf("%d\n",ret);
-
         printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
+#endif
         if(-1==ret) // databases have wrong.
         {
 #ifdef DEBUG 
@@ -28,7 +28,7 @@ int signinconfirmserver(int socketfd)
         }else if(1==ret){   // create account.
             acci.id=-2;
             //char saltbuf[150]={0};
-            generateSalt(11,acci.salt);
+            generateSalt(ACC_INF_SALT_,acci.salt);
 #ifdef DEBUG 
             printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
 #endif              
@@ -42,24 +42,48 @@ int signinconfirmserver(int socketfd)
             {
                 ret=-1;
                 send_n(socketfd,&ret,sizeof(int));
-                printf("failed\n");
+                printf("Account create failed\n");
                 return -1;
             }
             ret=0;
             send_n(socketfd,&ret,sizeof(int));
-            printf("success\n");
-        }else if(0==ret)    
+            // create virtual work catalog.
+            Vir_File_Sys vfs;
+            querymysql(&acci); 
+            //char md5buf[FILE_SYS_MD5_SIZE_]={0};
+            vfs.procode=0;
+            strcpy(vfs.name,acci.name);
+            vfs.type='d';
+            vfs.cur_cat='1';
+            vfs.belong=acci.PasswdId;
+        
+            // renew table three
+            Tmp_Fd_Acci tfa;
+            strcpy(tfa.name,acci.name);
+            updatemysqltablethree(&tfa);
+
+            //strcpy(vfs.md5sum,md5buf);
+            if(-1==virFileInsertSer(&vfs))
+            {
+                printf("Catalog create failed!\n");
+            }
+            printf("Account create success!\n");
+        }else if(0==ret)        // confirm passwd.
         {
 #ifdef DEBUG 
             printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
 #endif              
             send_n(socketfd,&acci,sizeof(acci));
             recv_n(socketfd,&i,sizeof(int));
-            if(i>=3)
+            if(i>=ACC_INF_PSD_RETRY_)
             {
                 return -1;
             }
         }
     }
+    // renew table three
+    Tmp_Fd_Acci tfa;
+    strcpy(tfa.name,acci.name);
+    updatemysqltablethree(&tfa);
     return 0;
 }

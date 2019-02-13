@@ -42,4 +42,10 @@
 #define DEFAULT_PORT 2333
 #define PIPE_BUF_ 32768
 #define MYSQL_BUF_SIZE_ 256
+#define ACC_INF_NAME_ 24    // signin or signup name max 23.
+#define ACC_INF_SALT_ 11    // random generate string that size is 10.
+#define ACC_INF_ENCODE_ 89  // crypt_r sha-512 88 characters.
+#define ACC_INF_PASSWD_ 32  // signin or signup passwd max 32
+#define ACC_INF_ENCRYPT_ 6  // encrypt type : SHA-512.
+#define ACC_INF_PSD_RETRY_ 3 // passwd retry input number.
 #endif

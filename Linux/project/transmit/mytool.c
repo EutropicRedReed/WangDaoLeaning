@@ -64,17 +64,17 @@ int my_ls(const char *addr,int fd)
             }
         }
         if(S_ISLNK(statbuf.st_mode))
-            typebuf[0]='l';
+            typebuf[0]='l'; // link file type
         if(S_ISBLK(statbuf.st_mode))
-            typebuf[0]='b';
+            typebuf[0]='b'; // block file type
         if(S_ISCHR(statbuf.st_mode))
-            typebuf[0]='c';
+            typebuf[0]='c'; // character device file type
         if(S_ISDIR(statbuf.st_mode))
-            typebuf[0]='d';
+            typebuf[0]='d'; // catalog file type
         if(S_ISSOCK(statbuf.st_mode))
-            typebuf[0]='s';
+            typebuf[0]='s'; // socket file type
         if(S_ISFIFO(statbuf.st_mode))
-            typebuf[0]='p';
+            typebuf[0]='p'; // pipe file type
         char timebuf[30]={0};
         strncat(timebuf,ctime(&statbuf.st_mtime)+4,12);
         //printf hide catalog
