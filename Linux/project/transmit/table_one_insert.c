@@ -1,5 +1,5 @@
 #include "factory.h"
-int insertmysql(Acc_Inf *acci)
+int insertmysqltableone(Acc_Inf *acci)
 {
 	MYSQL *conn;
     const char* server=MYSQL_SERVER_NAME_;     

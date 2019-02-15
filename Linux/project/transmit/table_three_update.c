@@ -30,7 +30,6 @@ int updatemysqltablethree(Tmp_Fd_Acci *tfa)
         puts(update);
         t=mysql_query(conn,update);
 	}
-    printf("update success\n");
 	mysql_close(conn);
 	return 0;
 }

@@ -1,5 +1,5 @@
 #include "factory.h"
-int querymysql(Acc_Inf *acci)
+int querymysqltableone(Acc_Inf *acci)
 {
 	MYSQL *conn;
 	MYSQL_RES *res;

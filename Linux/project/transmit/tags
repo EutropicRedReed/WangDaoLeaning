@@ -1,0 +1,169 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ACC_INF_ENCODE_	head.h	58;"	d
+ACC_INF_ENCODE_	ulclient/head.h	58;"	d
+ACC_INF_ENCRYPT_	head.h	60;"	d
+ACC_INF_ENCRYPT_	ulclient/head.h	60;"	d
+ACC_INF_NAME_	head.h	56;"	d
+ACC_INF_NAME_	ulclient/head.h	56;"	d
+ACC_INF_PASSWD_	head.h	59;"	d
+ACC_INF_PASSWD_	ulclient/head.h	59;"	d
+ACC_INF_PSD_RETRY_	head.h	61;"	d
+ACC_INF_PSD_RETRY_	ulclient/head.h	61;"	d
+ACC_INF_SALT_	head.h	57;"	d
+ACC_INF_SALT_	ulclient/head.h	57;"	d
+Acc_Inf	factory.h	/^}Acc_Inf;$/;"	t	typeref:struct:__anon6
+Acc_Inf	ulclient/signin.c	/^}Acc_Inf;$/;"	t	typeref:struct:__anon4	file:
+CAPACITY_	head.h	51;"	d
+CAPACITY_	ulclient/head.h	51;"	d
+CAT_NAME_SIZE_	head.h	65;"	d
+DEFAULT_PORT	head.h	53;"	d
+DEFAULT_PORT	ulclient/head.h	53;"	d
+FILE_SYS_MD5_SIZE_	head.h	62;"	d
+FILE_SYS_MD5_SIZE_	ulclient/head.h	62;"	d
+Factory	factory.h	/^}Factory,*pFactory;$/;"	t	typeref:struct:__anon5
+Flag	factory.h	/^    short *Flag;$/;"	m	struct:__anon5
+MAX_BUF_SIZE	client/tcp_client.c	2;"	d	file:
+MAX_BUF_SIZE	head.h	52;"	d
+MAX_BUF_SIZE	ulclient/head.h	52;"	d
+MAX_BUF_SIZE	ulclient/mytool.c	3;"	d	file:
+MYPRO_LEN_	head.h	37;"	d
+MYPRO_LEN_	ulclient/head.h	37;"	d
+MYSQL_BUF_SIZE_	head.h	55;"	d
+MYSQL_BUF_SIZE_	ulclient/head.h	55;"	d
+MYSQL_DATABASES_NAME_	head.h	43;"	d
+MYSQL_DATABASES_NAME_	ulclient/head.h	43;"	d
+MYSQL_PASSWORD_	head.h	42;"	d
+MYSQL_PASSWORD_	ulclient/head.h	42;"	d
+MYSQL_SERVER_NAME_	head.h	40;"	d
+MYSQL_SERVER_NAME_	ulclient/head.h	40;"	d
+MYSQL_TABLE_ONE_	head.h	44;"	d
+MYSQL_TABLE_ONE_	ulclient/head.h	44;"	d
+MYSQL_TABLE_THREE_	head.h	46;"	d
+MYSQL_TABLE_THREE_	ulclient/head.h	46;"	d
+MYSQL_TABLE_TWO_	head.h	45;"	d
+MYSQL_TABLE_TWO_	ulclient/head.h	45;"	d
+MYSQL_USER_NAME_	head.h	41;"	d
+MYSQL_USER_NAME_	ulclient/head.h	41;"	d
+Node_t	work_que.h	/^}Node_t,*pNode_t;$/;"	t	typeref:struct:tag_node
+PIPE_BUF_	head.h	54;"	d
+PIPE_BUF_	ulclient/head.h	54;"	d
+PasswdId	factory.h	/^    int PasswdId;$/;"	m	struct:__anon6
+PasswdId	ulclient/signin.c	/^    int PasswdId;$/;"	m	struct:__anon4	file:
+Que_t	work_que.h	/^}Que_t,*pQue_t;$/;"	t	typeref:struct:__anon2
+SRC	Makefile	/^SRC:=$(wildcard *.c)$/;"	m
+SRC	ulclient/Makefile	/^SRC:=$(wildcard *.c)$/;"	m
+THREAD_NUM_	head.h	50;"	d
+THREAD_NUM_	ulclient/head.h	50;"	d
+Tmp_Fd_Acci	factory.h	/^}Tmp_Fd_Acci;$/;"	t	typeref:struct:__anon8
+VIR_FILE_SYS_MAX_DEEP_	head.h	63;"	d
+VIR_FILE_SYS_MAX_DEEP_	ulclient/head.h	63;"	d
+VIR_FILE_SYS_MAX_NUM_	head.h	64;"	d
+Vir_File_Sys	factory.h	/^}Vir_File_Sys;  $/;"	t	typeref:struct:__anon7
+_GNU_SOURCE	head.h	3;"	d
+_GNU_SOURCE	ulclient/head.h	3;"	d
+__FACTORY_H__	factory.h	2;"	d
+__HEAD_H__	head.h	2;"	d
+__HEAD_H__	ulclient/head.h	2;"	d
+__TRANFILE_H__	tranfile.h	2;"	d
+__TRANFILE_H__	ulclient/tranfile.h	2;"	d
+__WORK_QUE_H__	work_que.h	2;"	d
+args_check	head.h	39;"	d
+args_check	ulclient/head.h	39;"	d
+belong	factory.h	/^    int belong;$/;"	m	struct:__anon7
+buf	tranfile.h	/^    char buf[MAX_BUF_SIZE];$/;"	m	struct:__anon1
+buf	ulclient/tranfile.h	/^    char buf[MAX_BUF_SIZE];$/;"	m	struct:__anon3
+cleanup	main.c	/^void cleanup(void *p)$/;"	f
+code	factory.h	/^    int code;$/;"	m	struct:__anon7
+cond	factory.h	/^    pthread_cond_t cond;$/;"	m	struct:__anon5
+cur_cat	factory.h	/^    char cur_cat;   \/\/ '0' normal '1' current catalog '2' screen belong+md5sum '3' screen belong+name '4' screen belong+cur_cat '5' screen belong+type$/;"	m	struct:__anon7
+datalen	tranfile.h	/^    int datalen;$/;"	m	struct:__anon1
+datalen	ulclient/tranfile.h	/^    int datalen;$/;"	m	struct:__anon3
+deletemysqltablethree	table_three_delete.c	/^int deletemysqltablethree(Tmp_Fd_Acci *tfa)$/;"	f
+deletemysqltabletwo	table_two_delete.c	/^int deletemysqltabletwo(Vir_File_Sys *vfs)$/;"	f
+downFileFunc	factory.h	/^    threadfunc_t downFileFunc;$/;"	m	struct:__anon5
+encode	factory.h	/^    char encode[ACC_INF_ENCODE_];$/;"	m	struct:__anon6
+encode	ulclient/signin.c	/^    char encode[ACC_INF_ENCODE_];$/;"	m	struct:__anon4	file:
+exitFds	main.c	/^int exitFds[2];$/;"	v
+factoryInit	factory.c	/^void factoryInit(pFactory pf,threadfunc_t threadfunc)$/;"	f
+factoryStart	factory.c	/^void factoryStart(pFactory pf)$/;"	f
+fd	factory.h	/^    int fd;$/;"	m	struct:__anon8
+generateSalt	generatesalt.c	/^int generateSalt(int length,char *salt)$/;"	f
+generateSalt	ulclient/generatesalt.c	/^int generateSalt(int length,char *salt)$/;"	f
+getMd5Sum	md.c	/^int getMd5Sum(char *buf)$/;"	f
+id	factory.h	/^    int id;$/;"	m	struct:__anon6
+id	ulclient/signin.c	/^    int id;$/;"	m	struct:__anon4	file:
+insertmysqltableone	table_one_insert.c	/^int insertmysqltableone(Acc_Inf *acci)$/;"	f
+insertmysqltablethree	table_three_insert.c	/^int insertmysqltablethree(Tmp_Fd_Acci *tfa)$/;"	f
+main	client/tcp_client.c	/^int main(int argc,char *argv[])$/;"	f
+main	main.c	/^int main()$/;"	f
+main	ulclient/tcp_client.c	/^int main()\/\/(int argc,char *argv[])$/;"	f
+md5sum	factory.h	/^    char md5sum[FILE_SYS_MD5_SIZE_];$/;"	m	struct:__anon7
+myGetPasswd	mygetpasswd.c	/^int myGetPasswd(char *buf){$/;"	f
+myGetPasswd	ulclient/mygetpasswd.c	/^int myGetPasswd(char *buf){$/;"	f
+myProtocol	tranfile.h	/^}myProtocol;$/;"	t	typeref:struct:__anon1
+myProtocol	ulclient/tranfile.h	/^}myProtocol;$/;"	t	typeref:struct:__anon3
+my_chdir	mytool.c	/^int my_chdir(const char *addr,int fd)$/;"	f
+my_chdir	ulclient/mytool.c	/^int my_chdir(const char *addr,int fd)$/;"	f
+my_ls	mytool.c	/^int my_ls(const char *addr,int fd)$/;"	f
+my_ls	ulclient/mytool.c	/^int my_ls(const char *addr,int fd)$/;"	f
+my_pwd	mytool.c	/^void my_pwd(int fd)$/;"	f
+my_pwd	ulclient/mytool.c	/^void my_pwd(int fd)$/;"	f
+my_rm	mytool.c	/^int my_rm(const char *pathname,int fd)$/;"	f
+my_rm	ulclient/mytool.c	/^void my_rm(const char *pathname,int fd)$/;"	f
+name	factory.h	/^    char name[ACC_INF_NAME_];$/;"	m	struct:__anon6
+name	factory.h	/^    char name[ACC_INF_NAME_];$/;"	m	struct:__anon7
+name	factory.h	/^    char name[ACC_INF_NAME_];$/;"	m	struct:__anon8
+name	ulclient/signin.c	/^    char name[ACC_INF_NAME_];$/;"	m	struct:__anon4	file:
+ndNext	work_que.h	/^    struct tag_node *ndNext;$/;"	m	struct:tag_node	typeref:struct:tag_node::tag_node
+ndSocketfd	work_que.h	/^    int ndSocketfd;$/;"	m	struct:tag_node
+pFactory	factory.h	/^}Factory,*pFactory;$/;"	t	typeref:struct:__anon5
+pNode_t	work_que.h	/^}Node_t,*pNode_t;$/;"	t	typeref:struct:tag_node
+pQue_t	work_que.h	/^}Que_t,*pQue_t;$/;"	t	typeref:struct:__anon2
+procode	factory.h	/^    int procode;$/;"	m	struct:__anon7
+pthid	factory.h	/^    pthread_t *pthid;$/;"	m	struct:__anon5
+que	factory.h	/^    pQue_t que;$/;"	m	struct:__anon5
+queCapacity	work_que.h	/^    int queCapacity;$/;"	m	struct:__anon2
+queGet	work_que.c	/^int  queGet(pQue_t pq,pNode_t* pget)$/;"	f
+queHead	work_que.h	/^    pNode_t queHead,queTail;$/;"	m	struct:__anon2
+queInsert	work_que.c	/^void queInsert(pQue_t pq,pNode_t pnew)$/;"	f
+queMutex	work_que.h	/^    pthread_mutex_t queMutex;$/;"	m	struct:__anon2
+queSize	work_que.h	/^    int queSize;$/;"	m	struct:__anon2
+queTail	work_que.h	/^    pNode_t queHead,queTail;$/;"	m	struct:__anon2
+querymysqltableone	table_one_query.c	/^int querymysqltableone(Acc_Inf *acci)$/;"	f
+querymysqltablethree	table_three_query.c	/^int querymysqltablethree(Tmp_Fd_Acci *tfa)$/;"	f
+querymysqltabletwo	table_two_query.c	/^int querymysqltabletwo(Vir_File_Sys *vfs)$/;"	f
+recv_n	client/tran_n.c	/^int recv_n(int sfd,void* p,int len)$/;"	f
+recv_n	tran_n.c	/^int recv_n(int sfd,void* p,int len)$/;"	f
+recv_n	ulclient/tran_n.c	/^int recv_n(int sfd,void* p,int len)$/;"	f
+recvorder	recvorder.c	/^int recvorder(int fd)$/;"	f
+recvorder	ulclient/recvorder.c	/^int recvorder(int fd)$/;"	f
+salt	factory.h	/^    char salt[ACC_INF_SALT_];$/;"	m	struct:__anon6
+salt	ulclient/signin.c	/^    char salt[ACC_INF_SALT_];$/;"	m	struct:__anon4	file:
+send_n	client/tran_n.c	/^int send_n(int sfd,void* p,int len)$/;"	f
+send_n	tran_n.c	/^int send_n(int sfd,void* p,int len)$/;"	f
+send_n	ulclient/tran_n.c	/^int send_n(int sfd,void* p,int len)$/;"	f
+sendorder	sendorder.c	/^int sendorder(int socketfd)$/;"	f
+sendorder	ulclient/sendorder.c	/^int sendorder(int socketfd)$/;"	f
+sigExitFunc	main.c	/^void sigExitFunc(int signum)$/;"	f
+signinconfirmclient	ulclient/signin.c	/^int signinconfirmclient(int socketfd)$/;"	f
+signinconfirmserver	confsignin.c	/^int signinconfirmserver(int socketfd)$/;"	f
+tag_node	work_que.h	/^typedef struct tag_node$/;"	s
+tcpInit	tcp_init.c	/^int tcpInit()$/;"	f
+threadNum	factory.h	/^    int threadNum;$/;"	m	struct:__anon5
+threadfunc	main.c	/^void* threadfunc(void* p)$/;"	f
+threadfunc_t	factory.h	/^typedef void* (*threadfunc_t)(void*);$/;"	t
+tranFile	tranfile.c	/^int tranFile(int socketfd,char *pathname)$/;"	f
+tranFile	ulclient/tranfile.c	/^int tranFile(int socketfd,char *pathname)$/;"	f
+type	factory.h	/^    char type;$/;"	m	struct:__anon7
+type	tranfile.h	/^    unsigned short type;$/;"	m	struct:__anon1
+type	ulclient/tranfile.h	/^    unsigned short type;$/;"	m	struct:__anon3
+updatemysqltablethree	table_three_update.c	/^int updatemysqltablethree(Tmp_Fd_Acci *tfa)$/;"	f
+updatemysqltabletwo	table_two_update.c	/^int updatemysqltabletwo(Vir_File_Sys *vfs)$/;"	f
+uploadFile	ulclient/upload.c	/^int uploadFile(int new_fd)$/;"	f
+uploadFile	upload.c	/^int uploadFile(int new_fd)$/;"	f
+virFileInsertSer	table_two_insert.c	/^int virFileInsertSer(Vir_File_Sys *vfs)$/;"	f

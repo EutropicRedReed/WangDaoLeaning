@@ -62,4 +62,5 @@
 #define FILE_SYS_MD5_SIZE_ 33   // md5 22 characters 
 #define VIR_FILE_SYS_MAX_DEEP_ 15   // maximal catalog depth
 #define VIR_FILE_SYS_MAX_NUM_ 256   // maximal catalog number
+#define CAT_NAME_SIZE_ 24
 #endif

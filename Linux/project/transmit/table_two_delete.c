@@ -31,7 +31,7 @@ int deletemysqltabletwo(Vir_File_Sys *vfs)
     }else if('4'==vfs->cur_cat){
         char Delete[MYSQL_BUF_SIZE_]="delete from ";
         sprintf(Delete,"%s%s where belong=",Delete,MYSQL_TABLE_TWO_);
-        sprintf(Delete,"%s%d and cur_cat='%c';",Delete,vfs->belong,vfs->cur_cat);
+        sprintf(Delete,"%s%d and procode='%c';",Delete,vfs->belong,vfs->procode);
         puts(Delete);
         t=mysql_query(conn,Delete);
     }else if('5'==vfs->cur_cat){
@@ -42,7 +42,8 @@ int deletemysqltabletwo(Vir_File_Sys *vfs)
         t=mysql_query(conn,Delete);
     }else{  // normal Delete.
         char Delete[MYSQL_BUF_SIZE_]="delete from ";
-        sprintf(Delete,"%s%s where belong=%d;",Delete,MYSQL_TABLE_TWO_,vfs->belong);
+        sprintf(Delete,"%s%s where belong=",Delete,MYSQL_TABLE_TWO_);
+        sprintf(Delete,"%s%d and code='%c';",Delete,vfs->belong,vfs->code);
         puts(Delete);
         t=mysql_query(conn,Delete);
     }
@@ -52,8 +53,6 @@ int deletemysqltabletwo(Vir_File_Sys *vfs)
 		printf("Error making delete:%s\n",mysql_error(conn));
 	    mysql_close(conn);
         return -1;
-	}else{
-		printf("delete success,delete row=%ld\n",(long)mysql_affected_rows(conn));
 	}
 	mysql_close(conn);
 	return 0;

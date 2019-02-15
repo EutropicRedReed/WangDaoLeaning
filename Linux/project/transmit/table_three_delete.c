@@ -32,8 +32,6 @@ int deletemysqltablethree(Tmp_Fd_Acci *tfa)
 		printf("Error making query:%s\n",mysql_error(conn));
 	    mysql_close(conn);
         return -1;
-	}else{
-		printf("delete success,delete row=%ld\n",(long)mysql_affected_rows(conn));
 	}
 	mysql_close(conn);
 	return 0;

@@ -1,5 +1,5 @@
 #include "factory.h"
-int virFileInsertSer(Vir_File_Sys *vfs)
+int insertmysqltabletwo(Vir_File_Sys *vfs)
 {
 	MYSQL *conn;
 	const char* server=MYSQL_SERVER_NAME_; 
@@ -35,8 +35,6 @@ int virFileInsertSer(Vir_File_Sys *vfs)
 		printf("Error making query:%s\n",mysql_error(conn));
 	    mysql_close(conn);
         return -1;
-	}else{
-		printf("insert success\n");
 	}
 	mysql_close(conn);
 	return 0;

@@ -45,7 +45,6 @@ int querymysqltablethree(Tmp_Fd_Acci *tfa)
             }else{	
                 tfa->fd=atoi(row[0]);
                 strcpy(tfa->name,row[1]);
-                printf("query success\n");
             }
         }else{
             mysql_close(conn);

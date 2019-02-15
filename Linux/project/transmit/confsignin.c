@@ -19,7 +19,7 @@ int signinconfirmserver(int socketfd)
         tfa.fd=socketfd;
         insertmysqltablethree(&tfa);
 
-        ret=querymysql(&acci);
+        ret=querymysqltableone(&acci);
 #ifdef DEBUG
         printf("%d\n",ret);
         printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
@@ -46,7 +46,7 @@ int signinconfirmserver(int socketfd)
 #ifdef DEBUG 
             printf("%d,%s,%s,%s\n",acci.id,acci.salt,acci.encode,acci.name);
 #endif              
-            if(-1==insertmysql(&acci))
+            if(-1==insertmysqltableone(&acci))
             {
                 ret=-1;
                 send_n(socketfd,&ret,sizeof(int));
@@ -58,7 +58,7 @@ int signinconfirmserver(int socketfd)
             send_n(socketfd,&ret,sizeof(int));
             // create virtual work catalog.
             Vir_File_Sys vfs;
-            querymysql(&acci); 
+            querymysqltableone(&acci); 
             //char md5buf[FILE_SYS_MD5_SIZE_]={0};
             vfs.procode=0;
             strcpy(vfs.name,acci.name);
@@ -67,7 +67,7 @@ int signinconfirmserver(int socketfd)
             vfs.belong=acci.PasswdId;
         
             //strcpy(vfs.md5sum,md5buf);
-            if(-1==virFileInsertSer(&vfs))
+            if(-1==insertmysqltabletwo(&vfs))
             {
                 printf("Catalog create failed!\n");
             }

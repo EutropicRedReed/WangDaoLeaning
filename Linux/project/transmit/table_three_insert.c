@@ -24,8 +24,6 @@ int insertmysqltablethree(Tmp_Fd_Acci *tfa)
         printf("Error making query:%s\n",mysql_error(conn));
         mysql_close(conn);
         return -1;
-    }else{
-        printf("insert success\n");
     }
     mysql_close(conn);
     return 0;
