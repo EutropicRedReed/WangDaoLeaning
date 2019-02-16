@@ -152,10 +152,10 @@ int my_chdir(const char *addr,int fd)
             return 0;
         }
 
-        strcpy(buf,"please check pathname\n");
-        datalen=strlen(buf);
-        send_n(fd,&datalen,sizeof(int));
-        send_n(fd,buf,datalen);
+       // strcpy(buf,"please check pathname\n");
+       // datalen=strlen(buf);
+       // send_n(fd,&datalen,sizeof(int));
+       // send_n(fd,buf,datalen);
         return -1;
     }
 
@@ -243,10 +243,10 @@ int my_chdir(const char *addr,int fd)
             send_n(fd,buf,datalen);
             return 0;
         }
-        strcpy(buf,"please check pathname\n");
-        datalen=strlen(buf);
-        send_n(fd,&datalen,sizeof(int));
-        send_n(fd,buf,datalen);
+       // strcpy(buf,"please check pathname\n");
+       // datalen=strlen(buf);
+       // send_n(fd,&datalen,sizeof(int));
+       // send_n(fd,buf,datalen);
         return -1;
     }
     return 0;
@@ -321,10 +321,10 @@ int my_ls(const char *addr,int fd)
         num=querymysqltabletwo(vfs);
         if(!num)
         {
-            strcpy(buf,"no file\n");
-            datalen=strlen(buf);
-            send_n(fd,&datalen,sizeof(int));
-            send_n(fd,buf,datalen);
+           // strcpy(buf,"no file\n");
+           // datalen=strlen(buf);
+           // send_n(fd,&datalen,sizeof(int));
+           // send_n(fd,buf,datalen);
             return -1;
         }
         i=0;
@@ -363,10 +363,10 @@ int my_ls(const char *addr,int fd)
         num=querymysqltabletwo(vfs);
         if(!num)
         {
-            strcpy(buf,"no file\n");
-            datalen=strlen(buf);
-            send_n(fd,&datalen,sizeof(int));
-            send_n(fd,buf,datalen);
+           // strcpy(buf,"no file\n");
+           // datalen=strlen(buf);
+           // send_n(fd,&datalen,sizeof(int));
+           // send_n(fd,buf,datalen);
             return -1;
         }
         i=0;
@@ -466,10 +466,10 @@ int my_ls(const char *addr,int fd)
 #endif
             if(!num)
             {
-                strcpy(buf,"no file\n");
-                printf("no file\n");
-                send_n(fd,&datalen,sizeof(int));
-                send_n(fd,buf,datalen);
+               // strcpy(buf,"no file\n");
+               // printf("no file\n");
+               // send_n(fd,&datalen,sizeof(int));
+               // send_n(fd,buf,datalen);
                 return -1;
             }
             i=0;
@@ -493,10 +493,10 @@ int my_ls(const char *addr,int fd)
             return 0;
         }
         printf("error\n");
-        strcpy(buf,"error: pathname\n");
-        datalen=strlen(buf);
-        send_n(fd,&datalen,sizeof(int));
-        send_n(fd,buf,datalen);
+       // strcpy(buf,"error: pathname\n");
+       // datalen=strlen(buf);
+       // send_n(fd,&datalen,sizeof(int));
+       // send_n(fd,buf,datalen);
         return -1;
     }
     if(!strncmp(addr,"/",1))
@@ -574,10 +574,10 @@ int my_ls(const char *addr,int fd)
             vfs[0].cur_cat='6';
             if(!(num=querymysqltabletwo(vfs)))
             {
-                strcpy(buf,"no file\n");
-                printf("no file\n");
-                send_n(fd,&datalen,sizeof(int));
-                send_n(fd,buf,datalen);
+               // strcpy(buf,"no file\n");
+               // printf("no file\n");
+               // send_n(fd,&datalen,sizeof(int));
+               // send_n(fd,buf,datalen);
                 return -1;
             }
             i=0;
@@ -597,31 +597,83 @@ int my_ls(const char *addr,int fd)
             send_n(fd,buf,datalen);
             return 0;
         }
-        printf("error\n");
-        strcpy(buf,"error: pathname\n");
-        datalen=strlen(buf);
-        send_n(fd,&datalen,sizeof(int));
-        send_n(fd,buf,datalen);
+       // printf("error\n");
+       // strcpy(buf,"error: pathname\n");
+       // datalen=strlen(buf);
+       // send_n(fd,&datalen,sizeof(int));
+       // send_n(fd,buf,datalen);
         return -1;
     }
     return 0;
 }
 
 
-int my_rm(const char *pathname,int fd)
+int my_rm(const char *filename,int fd)
 {
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
-    if(-1==unlink(pathname))
+    char md5sum[FILE_SYS_MD5_SIZE_];
+    int num=0,k=0,code=0,flag=0;
+
+    Vir_File_Sys vfs[VIR_FILE_SYS_MAX_NUM_];
+    Tmp_Fd_Acci tfa;
+    Acc_Inf ai;
+    tfa.fd=fd;
+    querymysqltablethree(&tfa);
+    strcpy(ai.name,tfa.name);
+    querymysqltableone(&ai);
+    vfs[0].belong=ai.PasswdId;
+    vfs[0].cur_cat='1';
+    querymysqltabletwo(&vfs[0]);
+    code=vfs[0].code;
+    
+    printf("%s,%d\n",filename,code);
+
+    vfs[0].procode=vfs[0].code;
+    vfs[0].cur_cat='6';
+    num=querymysqltabletwo(vfs);
+    k=0;
+    while(k<num)
     {
-        perror("delete failed");
+        if((vfs[k].type=='-')&&(!strcmp(vfs[k].name,filename))&&(vfs[k].procode==code))
+        {
+            flag=1;
+            strcpy(md5sum,vfs[k].md5sum);
+            vfs[k].cur_cat='0';
+            deletemysqltabletwo(&vfs[k]);
+            break;
+        }
+        k++;
+    }
+    if(flag==1)
+    {
+        printf("success flag\n");
+        strcpy(buf,"success remove file\n");
+        datalen=strlen(buf);
+        char path[MAX_BUF_SIZE];
+        sprintf(path,"%s%s",FILE_STORAGE_PATH_,md5sum);
+        printf("%s\n",path);
+        if(-1==unlink(path))
+        {
+           // printf("failed rm file\n");
+           // strcpy(buf,"remove file failed\n");
+           // datalen=strlen(buf);
+           // send_n(fd,&datalen,sizeof(int));
+           // send_n(fd,buf,datalen);
+            return -1;
+        }
+        printf("success rm\n");
+        send_n(fd,&datalen,sizeof(int));
+        send_n(fd,buf,datalen);
+        return 0;
+    }else{
+       // printf("failed find filename\n");
+       // strcpy(buf,"please chech filename\n");
+       // datalen=strlen(buf);
+       // send_n(fd,&datalen,sizeof(int));
+       // send_n(fd,buf,datalen);
         return -1;
     }
-    sprintf(buf,"delete file success\n");
-    datalen=strlen(buf);
-    send_n(fd,&datalen,sizeof(int));
-    send_n(fd,buf,datalen);
-    return 0;
 }
 
 

@@ -63,6 +63,7 @@ void sigExitFunc(int signum)
 }
 int main()
 {
+    chdir(FILE_STORAGE_PATH_);
     pipe(exitFds);
     if(fork())
     {//父进程

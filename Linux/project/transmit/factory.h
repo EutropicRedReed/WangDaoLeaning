@@ -2,7 +2,6 @@
 #define __FACTORY_H__
 #include "head.h"
 #include "work_que.h"
-#include "tranfile.h"
 typedef void* (*threadfunc_t)(void*);
 typedef struct{
     pthread_t *pthid;
@@ -27,12 +26,22 @@ typedef struct{
     int belong;
     char md5sum[FILE_SYS_MD5_SIZE_];
     char cur_cat;   // '0' normal '1' current catalog '2' screen belong+md5sum '3' screen belong+name '4' screen belong+cur_cat '5' screen belong+type
-    long size;
+    long int size;
 }Vir_File_Sys;  
 typedef struct{ // table three make it easy to transmit data between table 1 and table 2.
     int fd;
     char name[ACC_INF_NAME_];
 }Tmp_Fd_Acci;
+typedef struct{
+    int datalen;
+    unsigned short type;
+    char buf[MAX_BUF_SIZE];
+}myProtocol;
+int tranFile(int new_fd,char *pathname);
+int uploadFile(int new_fd);
+int send_n(int sfd,void* ptran,int len);
+int recv_n(int sfd,void* ptran,int len);
+
 void factoryInit(pFactory pf,threadfunc_t threadfunc);
 void factoryStart(pFactory);
 int tcpInit();

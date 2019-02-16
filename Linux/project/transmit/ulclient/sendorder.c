@@ -129,6 +129,11 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
+
+                    recv_n(socketfd,&datalen,sizeof(int));
+                    if(-1==datalen)
+                    {close(socketfd);printf("error: gets\n");return -1;}
+
                     uploadFile(socketfd);
                     break;
                 }else if(!strcmp(temp,"puts"))
@@ -143,7 +148,17 @@ int sendorder(int socketfd)
                     {close(socketfd);printf("server close\n");return -1;}
                     if(-1==send_n(socketfd,temp,datalen))
                     {close(socketfd);printf("server close\n");return -1;}
+
+                    //recv_n(socketfd,&datalen,sizeof(int));
+                    //if(-1==datalen)
+                    //{close(socketfd);printf("error: puts\n");return -1;}
                     tranFile(socketfd,temp);    // begin upload file.
+                    if(-1==recv_n(socketfd,&datalen,sizeof(int)))
+                    {close(socketfd);printf("server close\n");return -1;}
+                    else{
+                        printf("success upload\n");
+                    }
+                    
                     break;
                 }else if(!strcmp(temp,"exit"))
                 {

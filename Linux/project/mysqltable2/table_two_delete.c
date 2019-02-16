@@ -1,4 +1,4 @@
-#include "factory.h"
+#include "../transmit/factory.h"
 int deletemysqltabletwo(Vir_File_Sys *vfs)
 {
 	MYSQL *conn;
@@ -31,7 +31,7 @@ int deletemysqltabletwo(Vir_File_Sys *vfs)
     }else if('4'==vfs->cur_cat){
         char Delete[MYSQL_BUF_SIZE_]="delete from ";
         sprintf(Delete,"%s%s where belong=",Delete,MYSQL_TABLE_TWO_);
-        sprintf(Delete,"%s%d and procode=%d;",Delete,vfs->belong,vfs->procode);
+        sprintf(Delete,"%s%d and cur_cat='%c';",Delete,vfs->belong,vfs->cur_cat);
         puts(Delete);
         t=mysql_query(conn,Delete);
     }else if('5'==vfs->cur_cat){
@@ -42,8 +42,7 @@ int deletemysqltabletwo(Vir_File_Sys *vfs)
         t=mysql_query(conn,Delete);
     }else{  // normal Delete.
         char Delete[MYSQL_BUF_SIZE_]="delete from ";
-        sprintf(Delete,"%s%s where belong=",Delete,MYSQL_TABLE_TWO_);
-        sprintf(Delete,"%s%d and code=%d;",Delete,vfs->belong,vfs->code);
+        sprintf(Delete,"%s%s where belong=%d;",Delete,MYSQL_TABLE_TWO_,vfs->belong);
         puts(Delete);
         t=mysql_query(conn,Delete);
     }
@@ -53,17 +52,19 @@ int deletemysqltabletwo(Vir_File_Sys *vfs)
 		printf("Error making delete:%s\n",mysql_error(conn));
 	    mysql_close(conn);
         return -1;
+	}else{
+		printf("delete success,delete row=%ld\n",(long)mysql_affected_rows(conn));
 	}
 	mysql_close(conn);
 	return 0;
 }
-//int main()
-//{
-//    Vir_File_Sys t;
-//    t.belong=17;
-//    t.cur_cat='2';
-//    strcpy(t.md5sum,"b");
-//    deletemysqltabletwo(&t);
-//    t.cur_cat='0';
-//    return 0;
-//}
+int main()
+{
+    Vir_File_Sys t;
+    t.belong=17;
+    t.cur_cat='2';
+    strcpy(t.md5sum,"b");
+    deletemysqltabletwo(&t);
+    t.cur_cat='0';
+    return 0;
+}

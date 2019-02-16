@@ -13,4 +13,5 @@ int recv_n(int sfd,void* ptran,int len);
 int generateSalt(int length,char *salt);
 int signinconfirmclient(int fd);
 int myGetPasswd(char *);
+int getMd5Sum(char *);
 #endif

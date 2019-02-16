@@ -44,6 +44,7 @@
 #define MYSQL_TABLE_ONE_ "account_information"
 #define MYSQL_TABLE_TWO_ "vir_file_sys"
 #define MYSQL_TABLE_THREE_ "tmp_fd_acci"
+#define FILE_STORAGE_PATH_ "/home/lucky/ftp_server_file/"
 // table of account information : account_information
 // table of virtual file system : vir_file_sys
 // table of temp fd to account information : tmp_fd_acci

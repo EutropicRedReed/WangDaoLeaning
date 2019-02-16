@@ -23,9 +23,9 @@ int insertmysqltabletwo(Vir_File_Sys *vfs)
         puts(insert);
         t=mysql_query(conn,insert);
     }else{  // vfs->type == '-' normal file
-        char insert[MYSQL_BUF_SIZE_]="insert into vir_file_sys(procode,name,type,belong,md5sum,cur_cat) values(";
-        sprintf(insert,"%s'%d','%s','%c','%d','%s','%c');",insert,vfs->procode,\
-                vfs->name,vfs->type,vfs->belong,vfs->md5sum,vfs->cur_cat);
+        char insert[MYSQL_BUF_SIZE_]="insert into vir_file_sys(procode,name,type,belong,md5sum,size) values(";
+        sprintf(insert,"%s'%d','%s','%c','%d','%s',%ld);",insert,vfs->procode,\
+                vfs->name,vfs->type,vfs->belong,vfs->md5sum,vfs->size);
         puts(insert);
         t=mysql_query(conn,insert);
     }

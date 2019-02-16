@@ -58,6 +58,9 @@ int recvorder(int fd)
             {
                 datalen=-1;
                 send_n(fd,&datalen,sizeof(int));
+            }else{
+                datalen=1;
+                send_n(fd,&datalen,sizeof(int));
             }
             break;
         case 7:

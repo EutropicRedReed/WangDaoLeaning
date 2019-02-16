@@ -1,4 +1,4 @@
-#include "factory.h"
+#include "tranfile.h"
 // gcc md.c -lcrypto -lssl -o md
 int getMd5Sum(char *addr)
 {

@@ -1,4 +1,4 @@
-#include "factory.h"
+#include "../transmit/factory.h"
 int querymysqltabletwo(Vir_File_Sys *vfs)
 {
     MYSQL *conn;
@@ -8,9 +8,7 @@ int querymysqltabletwo(Vir_File_Sys *vfs)
     const char* user=MYSQL_USER_NAME_;
     const char* password=MYSQL_PASSWORD_;
     const char* database=MYSQL_DATABASES_NAME_;
-    const char* table=MYSQL_TABLE_TWO_;
     int t;
-    int num=0;
 
     conn=mysql_init(NULL);
     if(!mysql_real_connect(conn,server,user,password,database,0,NULL,0))
@@ -22,43 +20,32 @@ int querymysqltabletwo(Vir_File_Sys *vfs)
 
     if('2'==vfs->cur_cat)
     {
-        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat,code,size from ";
-        sprintf(query,"%s%s where md5sum='%s';",query,table,vfs->md5sum);
+        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where md5sum='%s';",query,vfs->belong,vfs->md5sum);
         puts(query);
         t=mysql_query(conn,query);
     }else if('3'==vfs->cur_cat){
-        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat,code,size from ";
-        sprintf(query,"%s%s where belong=",query,table);
-        sprintf(query,"%s%d and name='%s';",query,vfs->belong,vfs->name);
+        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where name='%s';",query,vfs->belong,vfs->name);
         puts(query);
         t=mysql_query(conn,query);
     }else if('4'==vfs->cur_cat){
-        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat,code,size from ";
-        sprintf(query,"%s%s where belong=",query,table);
-        sprintf(query,"%s%d and code=%d;",query,vfs->belong,vfs->code);
+        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where name='%c';",query,vfs->belong,vfs->cur_cat);
         puts(query);
         t=mysql_query(conn,query);
     }else if('5'==vfs->cur_cat){
-        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat,code,size from ";
-        sprintf(query,"%s%s where belong=",query,table);
-        sprintf(query,"%s%d and type='%c';",query,vfs->belong,vfs->type);
-        puts(query);
-        t=mysql_query(conn,query);
-    }else if('6'==vfs->cur_cat){
-        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat,code,size from ";
-        sprintf(query,"%s%s where belong=",query,table);
-        sprintf(query,"%s%d and procode=%d;",query,vfs->belong,vfs->procode);
-        puts(query);
-        t=mysql_query(conn,query);
-    }else if('1'==vfs->cur_cat){
-        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat,code,size from ";
-        sprintf(query,"%s%s where belong=",query,table);
-        sprintf(query,"%s%d and cur_cat='%c';",query,vfs->belong,vfs->cur_cat);
+        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=",query,MYSQL_TABLE_TWO_);
+        sprintf(query,"%s%d and where name='%c';",query,vfs->belong,vfs->type);
         puts(query);
         t=mysql_query(conn,query);
     }else{  // normal query.
-        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat,code,size from ";
-        sprintf(query,"%s%s where belong=%d;",query,table,vfs->belong);
+        char query[MYSQL_BUF_SIZE_]="select procode,name,type,belong,md5sum,cur_cat from ";
+        sprintf(query,"%s%s where belong=%d;",query,MYSQL_TABLE_TWO_,vfs->belong);
         puts(query);
         t=mysql_query(conn,query);
     }
@@ -74,33 +61,26 @@ int querymysqltabletwo(Vir_File_Sys *vfs)
             if(NULL==(row=mysql_fetch_row(res)))
             {
                 mysql_close(conn);
-                return 0;
+                return 1;
             }
             int j=0;
             do{	
-                if(j<VIR_FILE_SYS_MAX_NUM_)
+                if(j<VIR_FILE_SYS_MAX_DEEP_)
                 {
 #ifdef DEBUG
-                    printf("%d,%d,%s,%c,%d,%s,%c,%d\n",atoi(row[6]),atoi(row[0]),row[1],*row[2],atoi(row[3]),row[4],*row[5],atoi(row[7]));
+                    printf("%d,%s,%c,%d,%s,%c\n",atoi(row[0]),row[1],*row[2],atoi(row[3]),row[4],*row[5]);
 #endif
                     if((vfs[j].belong=atoi(row[3]))>0)
                     {
                         vfs[j].procode=atoi(row[0]);
                         strcpy(vfs[j].name,row[1]);
                         vfs[j].type=*row[2];
-                        if(strlen(row[4])==32)
-                        {
-                            strcpy(vfs[j].md5sum,row[4]);
-                        }else{
-                            strcpy(vfs[j].md5sum,"NULL");
-                        }
+                        strcpy(vfs[j].md5sum,row[4]);
                         vfs[j].cur_cat=*row[5];
-                        vfs[j].code=atoi(row[6]);
-                        vfs[j].size=atoi(row[7]);
                     }
                     j++;
                 }
-                if(j==VIR_FILE_SYS_MAX_NUM_)
+                if(j==VIR_FILE_SYS_MAX_DEEP_)
                 {
                     break;
                 }
@@ -109,11 +89,10 @@ int querymysqltabletwo(Vir_File_Sys *vfs)
             mysql_close(conn);
             return -1;
         }
-        num=mysql_num_rows(res);
         mysql_free_result(res);
     }
     mysql_close(conn);
-    return num;
+    return 0;
 }
 //int main()
 //{
