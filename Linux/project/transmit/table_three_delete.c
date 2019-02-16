@@ -1,6 +1,7 @@
 #include "factory.h"
 int deletemysqltablethree(Tmp_Fd_Acci *tfa)
 {
+    LOG_REDIRECT_
 	MYSQL *conn;
 	const char* server=MYSQL_SERVER_NAME_;
 	const char* user=MYSQL_USER_NAME_;

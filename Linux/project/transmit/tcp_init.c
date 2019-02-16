@@ -2,6 +2,7 @@
 
 int tcpInit()
 {
+    LOG_REDIRECT_
     // generate a socket descriptor
     int socketfd=socket(AF_INET,SOCK_STREAM,0);
     if(-1==socketfd)

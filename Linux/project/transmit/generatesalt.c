@@ -1,7 +1,8 @@
-#include <func.h>
+#include "factory.h"
 //产生长度为length的随机字符串
 int generateSalt(int length,char *salt)
 {
+    LOG_REDIRECT_
 	int flag, i;
 	srand((unsigned) time(NULL ));
 	for (i = 0; i < length - 1; i++)

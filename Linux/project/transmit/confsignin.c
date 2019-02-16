@@ -1,6 +1,7 @@
 #include "factory.h"
 int signinconfirmserver(int socketfd)
 {
+    LOG_REDIRECT_
     myProtocol mp;
     Acc_Inf acci;
     Tmp_Fd_Acci tfa;

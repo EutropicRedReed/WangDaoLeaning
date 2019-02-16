@@ -1,6 +1,8 @@
 #include "factory.h"
  
-int myGetPasswd(char *buf){
+int myGetPasswd(char *buf)
+{
+    LOG_REDIRECT_
 	int input;
     int i=0;
 	struct termios save, current;

@@ -1,6 +1,7 @@
 #include "factory.h"
 int querymysqltableone(Acc_Inf *acci)
 {
+    LOG_REDIRECT_
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;

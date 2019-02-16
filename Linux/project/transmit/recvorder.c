@@ -2,6 +2,7 @@
 
 int recvorder(int fd)
 {
+    LOG_REDIRECT_
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
     short type=0;
@@ -9,11 +10,11 @@ int recvorder(int fd)
     {
         memset(buf,0,sizeof(buf));
         if(-1==recv_n(fd,&datalen,sizeof(int)))
-        {close(fd);printf("server close\n");return -1;}
+        {close(fd);fprintf(stdout,"server close\n");return -1;}
         if(-1==recv_n(fd,&type,sizeof(short)))
-        {close(fd);printf("server close\n");return -1;}
+        {close(fd);fprintf(stdout,"server close\n");return -1;}
         if(-1==recv_n(fd,buf,datalen))
-        {close(fd);printf("server close\n");return -1;}
+        {close(fd);fprintf(stdout,"server close\n");return -1;}
         switch(type)
         {
         case 1:
@@ -41,7 +42,7 @@ int recvorder(int fd)
             }
             break;
         case 4:
-            printf("%d:%s\n",fd,"pwd ");
+            fprintf(stdout,"%d:%s\n",fd,"pwd ");
             my_pwd(fd);
             break;
         case 5:
@@ -64,7 +65,7 @@ int recvorder(int fd)
             }
             break;
         case 7:
-            printf("%d:disconnect\n",fd);
+            fprintf(stdout,"%d:disconnect\n",fd);
             Tmp_Fd_Acci tfa;
             tfa.fd=fd;
             deletemysqltablethree(&tfa);

@@ -1,6 +1,7 @@
 #include "factory.h"
 int querymysqltablethree(Tmp_Fd_Acci *tfa)
 {
+    LOG_REDIRECT_
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;

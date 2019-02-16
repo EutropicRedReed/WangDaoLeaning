@@ -1,6 +1,7 @@
 #include "factory.h"
 int my_chdir(const char *addr,int fd)
 {
+    LOG_REDIRECT_
     if(!strcmp(addr,"."))   // case 1: cd . 
     {
         my_pwd(fd);   

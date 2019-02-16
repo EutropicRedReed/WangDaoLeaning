@@ -2,6 +2,7 @@
 // gcc md.c -lcrypto -lssl -o md
 int getMd5Sum(char *addr)
 {
+    LOG_REDIRECT_
     MD5_CTX ctx;
     char buf[MAX_BUF_SIZE]={0};
     unsigned char outmd[16];

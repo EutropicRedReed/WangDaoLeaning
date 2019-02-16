@@ -1,6 +1,7 @@
 #include "factory.h"
 int sendorder(int socketfd)
 {
+    LOG_REDIRECT_
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
     while(1)

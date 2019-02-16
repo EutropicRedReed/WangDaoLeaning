@@ -1,6 +1,7 @@
 #include "factory.h"
 int querymysqltabletwo(Vir_File_Sys *vfs)
 {
+    LOG_REDIRECT_
     MYSQL *conn;
     MYSQL_RES *res;
     MYSQL_ROW row;

@@ -1,6 +1,7 @@
 #include "factory.h"
 int tranFile(int socketfd,char *filename)
 {
+    LOG_REDIRECT_
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
     char pathname[MAX_BUF_SIZE]={0};

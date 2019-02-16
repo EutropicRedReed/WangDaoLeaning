@@ -45,6 +45,7 @@
 #define MYSQL_TABLE_TWO_ "vir_file_sys"
 #define MYSQL_TABLE_THREE_ "tmp_fd_acci"
 #define FILE_STORAGE_PATH_ "/home/lucky/ftp_server_file/"
+#define FILE_LOG_PATH_ "/home/lucky/ftp_server_file/log/log"
 // table of account information : account_information
 // table of virtual file system : vir_file_sys
 // table of temp fd to account information : tmp_fd_acci
@@ -64,4 +65,11 @@
 #define VIR_FILE_SYS_MAX_DEEP_ 15   // maximal catalog depth
 #define VIR_FILE_SYS_MAX_NUM_ 256   // maximal catalog number
 #define CAT_NAME_SIZE_ 24
+
+#define LOG_REDIRECT_ do{ \
+    int log_fd = open(FILE_LOG_PATH_,O_RDWR|O_APPEND); \
+    dup3(STDIN_FILENO,log_fd,O_APPEND);  \
+    dup3(STDOUT_FILENO,log_fd,O_APPEND); \
+    dup3(STDERR_FILENO,log_fd,O_APPEND); \
+}while(0);
 #endif

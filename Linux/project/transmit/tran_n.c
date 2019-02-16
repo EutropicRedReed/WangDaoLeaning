@@ -2,6 +2,7 @@
 
 int send_n(int sfd,void* p,int len)
 {
+    LOG_REDIRECT_
     char *ptran=(char*)p;
     int total=0;
     int ret;
@@ -18,6 +19,7 @@ int send_n(int sfd,void* p,int len)
 }
 int recv_n(int sfd,void* p,int len)
 {
+    LOG_REDIRECT_
     char *ptran=(char*)p;
     int total=0;
     int ret;

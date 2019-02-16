@@ -9,6 +9,7 @@ History: 修改历史记录列表，每条修改记录应包括修改日期、�
 *****************************************************************************/
 
 #include "factory.h"
+
 int exitFds[2];
 void cleanup(void *p)
 {
@@ -16,6 +17,7 @@ void cleanup(void *p)
 }
 void* threadfunc(void* p)
 {
+    LOG_REDIRECT_
     pFactory pf=(pFactory)p;
     int j=0;
     pthread_mutex_lock(&pf->que->queMutex);
@@ -63,6 +65,7 @@ void sigExitFunc(int signum)
 }
 int main()
 {
+    LOG_REDIRECT_
     chdir(FILE_STORAGE_PATH_);
     pipe(exitFds);
     if(fork())

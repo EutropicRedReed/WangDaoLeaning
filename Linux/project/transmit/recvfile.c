@@ -1,6 +1,7 @@
 #include "factory.h"
 int uploadFile(int new_fd)
 {
+    LOG_REDIRECT_
     int ret,code=0;
     int datalen;
     char buf[MAX_BUF_SIZE]={0};
